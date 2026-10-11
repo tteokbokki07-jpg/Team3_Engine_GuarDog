@@ -70,10 +70,30 @@ public class UImanager : MonoBehaviour
         Time.timeScale = 1;
         isPaused = false;
 
+        // 커서 보이기 및 잠금 해제
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+    }
+    public void Map()
+    {
+        SceneManager.LoadScene("Map");
+        Time.timeScale = 1;
+        isPaused = false;
+
         //Cursor.lockState = CursorLockMode.Locked;
         //Cursor.visible = false;
 
         //if (playerController != null) playerController.SetLookEnabled(true);
+    }
+    public void GameOver()
+    {
+        SceneManager.LoadScene("GameOver");
+        Time.timeScale = 1;
+        isPaused = false;
+
+        // 커서 보이기 및 잠금 해제
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
     }
 
  

@@ -37,10 +37,11 @@ public class Health : MonoBehaviour
 
     void Die()
     {
-        if (CompareTag("player"))
+        if (CompareTag("Player") || CompareTag("Home"))
         {
-            Debug.Log("Player Died");
-            Time.timeScale = 0f;
+            Debug.Log("Game Over");
+            var uiManager = FindObjectOfType<UImanager>();
+            uiManager.GameOver();
         }
         else
         {

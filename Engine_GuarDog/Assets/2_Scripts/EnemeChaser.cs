@@ -7,39 +7,123 @@ public class EnemeChaser : MonoBehaviour
     public float attackRange = 2f; //공격 범위
     public int damage = 1;
     public float attackCooldown = 1f; //공격 쿨타임
+    public bool goHome = false; //플레이어가 추적 범위에 없을때 집 추격
 
     Transform player;
+    Transform home;
+    Transform currentTarget;
+    Collider playerCollider;
+    Collider homeCollider;
     float lastAttackTime = -999f;
 
     void Start()
     {
         GameObject p = GameObject.FindWithTag("Player");
-        if (p != null) player = p.transform; //플레이어 Transform 저장
+        if (p != null)
+        {
+            player = p.transform; //플레이어 Transform 저장
+            playerCollider = p.GetComponent<Collider>();
+        }
+
+        GameObject h = GameObject.FindWithTag("Home");
+        if (h != null)
+        {
+            home = h.transform; //집 Transform 저장
+            homeCollider = h.GetComponent<Collider>();
+        }
+
+        currentTarget = player != null ? player : home;
     }
 
     void Update()
     {
-        if (player == null) return; //플레이어가 없으면 추적하지 않음
-
-        Vector3 toPlayer = player.position - transform.position;
-        toPlayer.y = 0; //높이 무시
-        float distance = toPlayer.magnitude; //플레이어와의 거리 계산
-
-        if (distance > detectRange) return; //추적 범위 밖이면 추적X
-
-        transform.forward = toPlayer.normalized; //플레이어 방향으로 회전
-
-        if (distance > attackRange)
-        { //공격 범위 밖이면 이동
-            float move = moveSpeed * Time.deltaTime;
-            transform.position += transform.forward * move; //플레이어 방향으로 이동
+        // 플레이어가 씬에서 사라졌다면 다시 찾기 시도
+        if (player == null)
+        {
+            GameObject p = GameObject.FindWithTag("Player");
+            if (p != null)
+            {
+                player = p.transform;
+                playerCollider = p.GetComponent<Collider>();
+            }
         }
-        else if (Time.time >= lastAttackTime + attackCooldown)
-        { //공격 범위 안이고 쿨타임이 지났으면 공격
-            lastAttackTime = Time.time; //마지막 공격 시간 업데이트
-            player.GetComponent<Health>().TakeDamage(damage); //데미지 적용
+
+        // 플레이어가 존재하고 거리 계산 (플레이어 중심이 아닌 콜라이더 표면 기준)
+        float distanceToPlayer = float.MaxValue;
+        if (player != null)
+        {
+            if (playerCollider != null)
+                distanceToPlayer = Vector3.Distance(transform.position, playerCollider.ClosestPoint(transform.position));
+            else
+            {
+                Vector3 toPlayerVec = player.position - transform.position;
+                toPlayerVec.y = 0;
+                distanceToPlayer = toPlayerVec.magnitude;
+            }
+        }
+
+        // 플레이어가 detectRange 안에 있으면 플레이어 추적, 아니면 집 추적
+        if (player != null && distanceToPlayer <= detectRange)
+        {
+            goHome = false;
+            currentTarget = player;
+        }
+        else
+        {
+            goHome = true;
+            currentTarget = home;
+        }
+
+        if (currentTarget == null) return; //추적할 대상이 없으면 아무것도 안함
+
+        // 타겟까지의 거리 계산: 콜라이더가 있으면 콜라이더의 가장 가까운 지점을 사용
+        Collider targetCollider = currentTarget == home ? homeCollider : (currentTarget == player ? playerCollider : null);
+
+        Vector3 closestPoint = targetCollider != null
+            ? targetCollider.ClosestPoint(transform.position)
+            : currentTarget.position;
+
+        Vector3 toTarget = closestPoint - transform.position;
+        toTarget.y = 0; // 높이 무시
+        float distance = toTarget.magnitude;
+
+        // 타겟 방향으로 회전
+        if (toTarget.sqrMagnitude > 0.001f)
+            transform.forward = toTarget.normalized;
+
+        // 플레이어 타겟 행동
+        if (!goHome && currentTarget == player)
+        {
+            if (distance > attackRange)
+            {
+                float move = moveSpeed * Time.deltaTime;
+                transform.position += transform.forward * move;
+            }
+            else if (Time.time >= lastAttackTime + attackCooldown)
+            {
+                lastAttackTime = Time.time;
+                var hp = player.GetComponent<Health>();
+                if (hp != null) hp.TakeDamage(damage);
+            }
+            return;
+        }
+
+        // 집 타겟 행동: 집 콜라이더 표면 기준으로 공격 가능하면 공격, 아니면 이동
+        if (currentTarget == home)
+        {
+            if (distance > attackRange)
+            {
+                // 집으로 이동
+                float move = moveSpeed * Time.deltaTime;
+                transform.position += transform.forward * move;
+            }
+            else if (Time.time >= lastAttackTime + attackCooldown)
+            {
+                lastAttackTime = Time.time;
+                var hp = home.GetComponent<Health>();
+                if (hp != null) hp.TakeDamage(damage);
+                Debug.Log("집공격");
+            }
         }
     }
-
-
 }

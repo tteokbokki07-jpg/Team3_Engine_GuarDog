@@ -256,11 +256,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f76009092a528d546bf0f45b027ff55b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemeChaser
-  moveSpeed: 4
-  detectRange: 15
+  moveSpeed: 4.25
+  detectRange: 20
   attackRange: 2
   damage: 5
   attackCooldown: 1.5
+  goHome: 0
 --- !u!114 &3898818528070245405
 MonoBehaviour:
   m_ObjectHideFlags: 0
