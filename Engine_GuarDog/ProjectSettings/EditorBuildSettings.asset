@@ -17,6 +17,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/1_Scenes/GameOver.unity
     guid: 163d172b5b88bcf49a94fea8c0efdbc9
+  - enabled: 1
+    path: Assets/1_Scenes/GameClear.unity
+    guid: 5a981b5f0660dfa4e86721e05d03e7b6
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0

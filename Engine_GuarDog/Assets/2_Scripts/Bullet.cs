@@ -10,6 +10,10 @@ public class Bullet : MonoBehaviour
 
     void Start()
     {
+        if (isBigShot)
+        {
+            transform.localScale = transform.localScale * 1.5f;
+        }
         Destroy(gameObject, lifeTime); //lifeTime 후에 총알 삭제
     }
 

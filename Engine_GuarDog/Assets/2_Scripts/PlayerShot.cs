@@ -1,6 +1,7 @@
 using System.Xml.Serialization;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.InputSystem;
 
 public class PlayerShot : MonoBehaviour
@@ -9,21 +10,53 @@ public class PlayerShot : MonoBehaviour
     public Transform firePoint; //총알 발사 위치
     public float bulletSpeed = 20f; //총알 속도
     public float fireCooldown = 0.4f; //연사 속도
+    public Image CoolDownImage; //쿨다운 UI 이미지
     public bool isMultiShot = false; //멀티샷 여부
     public bool isDoubleShot = false; //더블샷 여부
     public bool isBigShot = false; //크기증가/관통샷 여부
 
     float lastFireTime = -999f; //마지막 발사 시간
 
+    public void OnMultiShot(bool isOn)
+    {
+        isMultiShot = isOn;
+        isMultiShot = !isMultiShot;
+    }
+    public void OnDoubleShot(bool isOn)
+    {
+        isDoubleShot = isOn;
+        isDoubleShot = !isDoubleShot;
+    }
+    public void OnBigShot(bool isOn)
+    {
+        isBigShot = isOn;
+        isBigShot = !isBigShot;
+    }
 
     void Start()
     {
-        
+        if (CoolDownImage != null)
+            CoolDownImage.fillAmount = 1f;
     }
 
     void Update()
     {
-        
+        // 쿨다운 진행에 따라 이미지 채우기 (fireCooldown이 0이면 항상 준비 상태)
+        if (CoolDownImage != null)
+        {
+            if (fireCooldown <= 0f)
+            {
+                CoolDownImage.fillAmount = 1f;
+            }
+            else
+            {
+                float elapsed = Time.time - lastFireTime;
+                if (elapsed < 0f) elapsed = 0f;
+                float progress = Mathf.Clamp01(elapsed / fireCooldown);
+                // 발사 직후 0에서 시작해 쿨다운이 끝나면 1이 되도록 설정
+                CoolDownImage.fillAmount = progress;
+            }
+        }
     }
 
     public void OnAttack(InputValue value) //유니티 인풋 시스템의 공격 입력 이벤트 처리
@@ -31,6 +64,10 @@ public class PlayerShot : MonoBehaviour
         if (Time.timeScale == 0f) return; //게임 일시정지 시 공격 무시
         if (Time.time < lastFireTime + fireCooldown) return; //연사 속도 제한
         lastFireTime = Time.time; //마지막 발사 시간 업데이트
+
+        if (CoolDownImage != null)
+            CoolDownImage.fillAmount = 0f;
+
         // 실제 발사 처리
         FireBullets();
 
@@ -76,7 +113,10 @@ public class PlayerShot : MonoBehaviour
         yield return new WaitForSeconds(delay); //지연 시간 대기
         if (Time.timeScale == 0f) yield break; //일시정지 상태면 취소
         // 두 번째 샷은 쿨타임 검사 없이 즉시 발사
-        lastFireTime = Time.time; //마지막 발사 시간 업데이트
+
+        if (CoolDownImage != null)
+            CoolDownImage.fillAmount = 0f;
+
         FireBullets();
     }
 

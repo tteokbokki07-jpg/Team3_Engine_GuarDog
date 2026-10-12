@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 4053094943033441598}
   - component: {fileID: 3216149639633492198}
   - component: {fileID: 7873819512166524154}
+  - component: {fileID: 6908898293778755667}
   - component: {fileID: 3773735617481597705}
   - component: {fileID: 779320419173521438}
-  - component: {fileID: 6908898293778755667}
   m_Layer: 0
   m_Name: TestBullet
   m_TagString: Untagged
@@ -69,7 +69,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 5530437036d1e0d4385a6005497ea87b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -93,6 +93,23 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &6908898293778755667
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2205163610957453508}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e247bcc5574940f43af5c4457665c2df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Bullet
+  damage: 3
+  lifeTime: 1
+  targetTag: Enemy
+  ownerTag: Player
+  isBigShot: 0
 --- !u!135 &3773735617481597705
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -141,20 +158,3 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &6908898293778755667
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2205163610957453508}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e247bcc5574940f43af5c4457665c2df, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Bullet
-  damage: 5
-  lifeTime: 1
-  targetTag: Enemy
-  ownerTag: Player
-  isBigShot: 0

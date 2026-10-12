@@ -103,7 +103,7 @@ public class EnemeChaser : MonoBehaviour
             {
                 lastAttackTime = Time.time;
                 var hp = player.GetComponent<Health>();
-                if (hp != null) hp.TakeDamage(damage);
+                if (hp != null) hp.TakeDamage(damage); // 플레이어는 1배 피해
             }
             return;
         }
@@ -121,9 +121,14 @@ public class EnemeChaser : MonoBehaviour
             {
                 lastAttackTime = Time.time;
                 var hp = home.GetComponent<Health>();
-                if (hp != null) hp.TakeDamage(damage);
+                if (hp != null) hp.TakeDamage(damage * 2); // 집은 2배 피해
                 Debug.Log("집공격");
             }
         }
     }
+
+
+
+
+
 }
