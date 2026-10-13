@@ -22,12 +22,10 @@ public class HealthItem : MonoBehaviour
     public void OnBestCondition(bool isOn)
     {
         isBestCondition = isOn;
-        isBestCondition = !isBestCondition;
     }
     public void OnAdrenaline(bool isOn)
     {
         isAdrenaline = isOn;
-        isAdrenaline = !isAdrenaline;
     }
 
 

@@ -9,6 +9,8 @@ public class Health : MonoBehaviour
     public Slider hpSlider; //ui 표시 슬라이더
     public TextMeshProUGUI HPText;
     public bool isMaxHP = true;
+    public GameManager gameManager;
+
     void Start()
     {
         currentHP = maxHP;
@@ -73,6 +75,9 @@ public class Health : MonoBehaviour
         {
             Debug.Log(name + " Died");
             Destroy(gameObject);
+            if (gameManager == null)
+                gameManager = FindObjectOfType<GameManager>();
+            gameManager.KillCount++;
         }
     }
 }

@@ -20,17 +20,14 @@ public class PlayerShot : MonoBehaviour
     public void OnMultiShot(bool isOn)
     {
         isMultiShot = isOn;
-        isMultiShot = !isMultiShot;
     }
     public void OnDoubleShot(bool isOn)
     {
         isDoubleShot = isOn;
-        isDoubleShot = !isDoubleShot;
     }
     public void OnBigShot(bool isOn)
     {
         isBigShot = isOn;
-        isBigShot = !isBigShot;
     }
 
     void Start()

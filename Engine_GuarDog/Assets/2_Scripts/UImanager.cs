@@ -6,6 +6,8 @@ using UnityEngine.UI;
 public class UImanager : MonoBehaviour
 {
     public GameObject PausePanel;
+    public GameObject ClearPanel;
+    public bool isGaming = true;
     public bool isPaused = false;
 
     private PlayerController playerController;
@@ -19,7 +21,7 @@ public class UImanager : MonoBehaviour
     [System.Obsolete]
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape) && isPaused == false)
+        if (Input.GetKeyDown(KeyCode.Escape) && isPaused == false && isGaming == true)
         {
             Time.timeScale = 0;
             PausePanel.SetActive(true);
@@ -33,7 +35,7 @@ public class UImanager : MonoBehaviour
             // 카메라 입력 비활성화
             if (playerController != null) playerController.SetLookEnabled(false);
         }
-        else if (Input.GetKeyDown(KeyCode.Escape) && isPaused == true)
+        else if (Input.GetKeyDown(KeyCode.Escape) && isPaused == true && isGaming == true)
         {
             Time.timeScale = 1;
             PausePanel.SetActive(false);
@@ -84,6 +86,20 @@ public class UImanager : MonoBehaviour
         //Cursor.visible = false;
 
         //if (playerController != null) playerController.SetLookEnabled(true);
+    }
+    public void GameClear()
+    {
+        Time.timeScale = 0;
+        ClearPanel.SetActive(true);
+        isPaused = true;
+        isGaming = false;
+
+        // 커서 보이기 및 잠금 해제
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+
+        // 카메라 입력 비활성화
+        if (playerController != null) playerController.SetLookEnabled(false);
     }
     public void GameOver()
     {
