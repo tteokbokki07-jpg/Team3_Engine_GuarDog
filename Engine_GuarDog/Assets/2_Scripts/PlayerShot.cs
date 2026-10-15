@@ -17,17 +17,17 @@ public class PlayerShot : MonoBehaviour
 
     float lastFireTime = -999f; //마지막 발사 시간
 
-    public void OnMultiShot(bool isOn)
+    public void OnMultiShot()
     {
-        isMultiShot = isOn;
+        isMultiShot = true;
     }
-    public void OnDoubleShot(bool isOn)
+    public void OnDoubleShot()
     {
-        isDoubleShot = isOn;
+        isDoubleShot = true;
     }
-    public void OnBigShot(bool isOn)
+    public void OnBigShot()
     {
-        isBigShot = isOn;
+        isBigShot = true;
     }
 
     void Start()

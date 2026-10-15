@@ -107,7 +107,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Bullet
   damage: 5
-  lifeTime: 1.5
+  lifeTime: 2
   targetTag: Player
   ownerTag: Enemy
   isBigShot: 0

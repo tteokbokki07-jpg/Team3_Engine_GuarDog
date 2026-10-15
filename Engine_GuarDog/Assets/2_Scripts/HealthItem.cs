@@ -19,13 +19,13 @@ public class HealthItem : MonoBehaviour
     private int bulletBuffAmount = 3;
     private PlayerShot playerShotRef;
     
-    public void OnBestCondition(bool isOn)
+    public void OnBestCondition()
     {
-        isBestCondition = isOn;
+        isBestCondition = true;
     }
-    public void OnAdrenaline(bool isOn)
+    public void OnAdrenaline()
     {
-        isAdrenaline = isOn;
+        isAdrenaline = true;
     }
 
 
