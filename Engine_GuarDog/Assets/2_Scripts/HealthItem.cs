@@ -149,7 +149,7 @@ public class HealthItem : MonoBehaviour
         int desired = 0;
         if (isBestCondition)
         {
-            desired = targetHealth.isMaxHP ? 5 : 2;
+            desired = targetHealth.isMaxHP ? 8 : 1;
         }
 
         if (bestBuffAppliedAmount != desired)
