@@ -10,6 +10,7 @@ public class PlayerShot : MonoBehaviour
     public Transform firePoint; //총알 발사 위치
     public float bulletSpeed = 20f; //총알 속도
     public float fireCooldown = 0.4f; //연사 속도
+    public float minFireCooldown = 0.05f; //최소 연사 속도
     public Image CoolDownImage; //쿨다운 UI 이미지
     public bool isMultiShot = false; //멀티샷 여부
     public bool isDoubleShot = false; //더블샷 여부
@@ -30,6 +31,26 @@ public class PlayerShot : MonoBehaviour
         isBigShot = true;
     }
 
+    public void StatATKUpg()
+    {
+        var bullet = bulletPrefab.GetComponent<Bullet>();
+        bullet.damage += 3; //총알 데미지 증가
+    }
+    public void StatATKUpgPlus()
+    {
+        var bullet = bulletPrefab.GetComponent<Bullet>();
+        bullet.damage += 5; //총알 데미지 증가
+    }
+    public void StatCoolUpg()
+    {
+        fireCooldown = Mathf.Max(minFireCooldown, fireCooldown - 0.1f); //공격속도 0.1 감소, 최소값 보정
+    }
+    public void StatCoolUpgPlus()
+    {
+        fireCooldown = Mathf.Max(minFireCooldown, fireCooldown - 0.15f); //공격속도 0.15 감소, 최소값 보정
+    }
+
+
     void Start()
     {
         if (CoolDownImage != null)
@@ -38,6 +59,9 @@ public class PlayerShot : MonoBehaviour
 
     void Update()
     {
+        // 최소 연사속도 보정: fireCooldown이 minFireCooldown보다 작아지지 않도록 유지
+        fireCooldown = Mathf.Max(minFireCooldown, fireCooldown);
+
         // 쿨다운 진행에 따라 이미지 채우기 (fireCooldown이 0이면 항상 준비 상태)
         if (CoolDownImage != null)
         {

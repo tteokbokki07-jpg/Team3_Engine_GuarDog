@@ -5010,6 +5010,7 @@ MonoBehaviour:
   firePoint: {fileID: 1054571052}
   bulletSpeed: 20
   fireCooldown: 0.4
+  minFireCooldown: 0.05
   CoolDownImage: {fileID: 715707322}
   isMultiShot: 0
   isDoubleShot: 0
@@ -5032,6 +5033,7 @@ MonoBehaviour:
   HPText: {fileID: 1384408689}
   isMaxHP: 1
   gameManager: {fileID: 0}
+  healthItem: {fileID: 0}
 --- !u!114 &602736477
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5044,13 +5046,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b7524ad10fb02e4990e6ee98237876c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HealthItem
-  targetHealth: {fileID: 602736476}
+  PlayerHealth: {fileID: 602736476}
+  HomeHealth: {fileID: 1920920463}
   isMaxHP: 1
   isBestCondition: 0
   isAdrenaline: 0
   AdCool: 20
   currentAdCool: 0
   AdHeal: 10
+  canRevive: 0
   bulletBuffApplied: 0
 --- !u!1001 &605983975
 PrefabInstance:
@@ -8671,7 +8675,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1642463306}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: StatManager, Assembly-CSharp
         m_MethodName: UpgradeBulletDamage
         m_Mode: 3
@@ -14618,7 +14622,6 @@ GameObject:
   - component: {fileID: 1642463303}
   - component: {fileID: 1642463302}
   - component: {fileID: 1642463304}
-  - component: {fileID: 1642463306}
   - component: {fileID: 1642463305}
   m_Layer: 0
   m_Name: Manager
@@ -14700,18 +14703,7 @@ MonoBehaviour:
   - {fileID: 8193805352273905036, guid: ae50d7f6b7e1e2a4e8b7fbbb8191dd89, type: 3}
   - {fileID: 8193805352273905036, guid: 253b8da0cbea03941b7d2201e79cb215, type: 3}
   - {fileID: 8193805352273905036, guid: 6fcdf832941c55f489d9ef4ce33bea56, type: 3}
---- !u!114 &1642463306
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1642463301}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 52443228e968f124ca2a3a8ce6089b71, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::StatManager
+  - {fileID: 7946499545654079494, guid: 953e14acc23a6d148ac381e75bc9708c, type: 3}
 --- !u!1 &1644199850
 GameObject:
   m_ObjectHideFlags: 0
@@ -16819,7 +16811,7 @@ GameObject:
   - component: {fileID: 1871740546}
   - component: {fileID: 1871740545}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: roofCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -17388,6 +17380,7 @@ MonoBehaviour:
   HPText: {fileID: 923068285}
   isMaxHP: 1
   gameManager: {fileID: 0}
+  healthItem: {fileID: 0}
 --- !u!65 &1920920464
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -20873,15 +20866,15 @@ PrefabInstance:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 1642463303}
   - {fileID: 2071663073}
+  - {fileID: 1642463303}
   - {fileID: 602736473}
   - {fileID: 333033321}
   - {fileID: 588849176}
+  - {fileID: 1920920467}
   - {fileID: 1871740548}
   - {fileID: 1241813583}
   - {fileID: 567098807}
-  - {fileID: 1920920467}
   - {fileID: 1991881960}
   - {fileID: 936412450}
   - {fileID: 1165317596}

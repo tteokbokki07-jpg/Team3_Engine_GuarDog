@@ -10,6 +10,7 @@ public class Health : MonoBehaviour
     public TextMeshProUGUI HPText;
     public bool isMaxHP = true;
     public GameManager gameManager;
+    public HealthItem healthItem; // HealthItem 참조
 
     void Start()
     {
@@ -65,7 +66,24 @@ public class Health : MonoBehaviour
 
     void Die()
     {
-        if (CompareTag("Player") || CompareTag("Home"))
+        if (CompareTag("Player"))
+        {
+            var healthItem = FindObjectOfType<HealthItem>();
+            if (healthItem.canRevive == false)
+            {
+                Debug.Log("Game Over");
+                var uiManager = FindObjectOfType<UImanager>();
+                uiManager.GameOver();
+
+            }
+            else if (healthItem.canRevive == true)
+            {
+                Debug.Log("Revived");
+                Revieve();
+                healthItem.canRevive = false;
+            }
+        }
+        else if (CompareTag("Home"))
         {
             Debug.Log("Game Over");
             var uiManager = FindObjectOfType<UImanager>();
@@ -79,5 +97,14 @@ public class Health : MonoBehaviour
                 gameManager = FindObjectOfType<GameManager>();
             gameManager.KillCount++;
         }
+    }
+
+    public void Revieve()
+    {
+        //효과 추가하면 조음
+        currentHP = 50;
+        UpdateBar();
+        UpdateHPText();
+        Debug.Log(name + " Revived");
     }
 }

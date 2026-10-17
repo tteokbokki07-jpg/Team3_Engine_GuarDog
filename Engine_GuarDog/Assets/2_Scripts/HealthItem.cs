@@ -3,7 +3,8 @@ using UnityEngine;
 
 public class HealthItem : MonoBehaviour
 {
-    public Health targetHealth; // 인스펙터에서 할당 가능. 할당하지 않으면 Start에서 자동으로 Find.
+    public Health PlayerHealth; // 인스펙터에서 할당 가능. 할당하지 않으면 Start에서 자동으로 Find.
+    public Health HomeHealth; // 인스펙터에서 할당 가능. 할당하지 않으면 Start에서 자동으로 Find.
     public bool isMaxHP = true; // Health.isMaxHP 복사본
     [Header("버프세팅")]
     public bool isBestCondition = false;
@@ -13,6 +14,8 @@ public class HealthItem : MonoBehaviour
     public float currentAdCool = 0f;
     public float AdHeal = 10f;
     Coroutine adrenalineRoutine;
+
+    public bool canRevive = false; // 사망 후 부활 가능 여부
 
     // 총알 데미지 버프 관리
     [SerializeField] private bool bulletBuffApplied = false;
@@ -27,12 +30,16 @@ public class HealthItem : MonoBehaviour
     {
         isAdrenaline = true;
     }
+    public void OnRevieve()
+    {
+        canRevive = true;
+    }
 
 
     void Start()
     {
-        if (targetHealth == null)
-            targetHealth = FindObjectOfType<Health>();
+        if (PlayerHealth == null)
+            PlayerHealth = FindObjectOfType<Health>();
 
         playerShotRef = FindObjectOfType<PlayerShot>();
 
@@ -67,8 +74,45 @@ public class HealthItem : MonoBehaviour
 
     void UpdateIsMaxHP()
     {
-        if (targetHealth == null) return;
-        isMaxHP = targetHealth.isMaxHP;
+        if (PlayerHealth == null) return;
+        isMaxHP = PlayerHealth.isMaxHP;
+    }
+
+    public void OnRevive()
+    {
+        var health = FindObjectOfType<Health>();
+        health.Revieve();
+    }
+
+    public void StatHPMax()
+    {
+        PlayerHealth.Heal(999); // 현재 체력을 최대 체력으로 회복
+    }
+    public void StatHPUpg()
+    {
+        PlayerHealth.maxHP += 30; // 최대 체력 증가
+        PlayerHealth.Heal(80); // 증가한 만큼 + 추가 회복
+    }
+    public void StatHPUpgPlus()
+    {
+        PlayerHealth.maxHP += 50; // 최대 체력 증가
+        PlayerHealth.Heal(140); // 증가한 만큼 + 추가 회복
+    }
+    public void StatHomeHPHeal()
+    {
+        HomeHealth.Heal(50); // 회복
+    }
+    public void StatHomeHPUpg()
+    {
+        HomeHealth.maxHP += 100; // 최대 체력 증가
+        HomeHealth.Heal(100); // 증가한 만큼 회복
+    }
+    public void StatAgainUpgrade()
+    {
+        var prefabBullet = playerShotRef.bulletPrefab.GetComponent<Bullet>();
+        prefabBullet.damage += 3; //총알 데미지 증가
+        PlayerHealth.maxHP += 25; // 최대 체력 증가
+        PlayerHealth.Heal(999); // 체력 회복
     }
 
     IEnumerator AdrenalineCoroutine()
@@ -86,14 +130,14 @@ public class HealthItem : MonoBehaviour
             {
                 currentAdCool = 0f;
 
-                if (targetHealth != null)
+                if (PlayerHealth != null)
                 {
                     int healAmount = Mathf.RoundToInt(AdHeal);
-                    targetHealth.Heal(healAmount);
+                    PlayerHealth.Heal(healAmount);
                 }
             }
 
-            if (targetHealth == null) break;
+            if (PlayerHealth == null) break;
         }
 
         adrenalineRoutine = null;
@@ -140,7 +184,7 @@ public class HealthItem : MonoBehaviour
     // BestCondition 버프 적용/갱신
     void UpdateBestBuff()
     {
-        if (targetHealth == null) return;
+        if (PlayerHealth == null) return;
 
         // 새로 적용해야 할 버프량 결정:
         // isBestCondition == false -> desired = 0 (버프 없음)
@@ -149,7 +193,7 @@ public class HealthItem : MonoBehaviour
         int desired = 0;
         if (isBestCondition)
         {
-            desired = targetHealth.isMaxHP ? 8 : 1;
+            desired = PlayerHealth.isMaxHP ? 8 : 1;
         }
 
         if (bestBuffAppliedAmount != desired)
