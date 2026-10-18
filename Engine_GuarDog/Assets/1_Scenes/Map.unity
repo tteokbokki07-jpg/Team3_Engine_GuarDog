@@ -14695,15 +14695,295 @@ MonoBehaviour:
   spawnPoint1: {fileID: 997312425}
   spawnPoint2: {fileID: 765602475}
   spawnPoint3: {fileID: 2071607638}
-  prefabs:
-  - {fileID: 8193805352273905036, guid: 4e5d64beb1001d947afdbb03f62b25fe, type: 3}
-  - {fileID: 8193805352273905036, guid: 84e2d1159643e05408a45f781c6e1fff, type: 3}
-  - {fileID: 8193805352273905036, guid: 3f89517699227b54a9dcd890c41e18da, type: 3}
-  - {fileID: 8193805352273905036, guid: 3b0bf363ca37573439099692862c17d4, type: 3}
-  - {fileID: 8193805352273905036, guid: ae50d7f6b7e1e2a4e8b7fbbb8191dd89, type: 3}
-  - {fileID: 8193805352273905036, guid: 253b8da0cbea03941b7d2201e79cb215, type: 3}
-  - {fileID: 8193805352273905036, guid: 6fcdf832941c55f489d9ef4ce33bea56, type: 3}
-  - {fileID: 7946499545654079494, guid: 953e14acc23a6d148ac381e75bc9708c, type: 3}
+  upgradeData:
+  - prefabs: {fileID: 8193805352273905036, guid: 4e5d64beb1001d947afdbb03f62b25fe, type: 3}
+    onSelect:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 602736477}
+          m_TargetAssemblyTypeName: HealthItem, Assembly-CSharp
+          m_MethodName: OnAgainUpgrade
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - prefabs: {fileID: 8193805352273905036, guid: 84e2d1159643e05408a45f781c6e1fff, type: 3}
+    onSelect:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 602736477}
+          m_TargetAssemblyTypeName: HealthItem, Assembly-CSharp
+          m_MethodName: OnRevieve
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - prefabs: {fileID: 8193805352273905036, guid: 3f89517699227b54a9dcd890c41e18da, type: 3}
+    onSelect:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 602736477}
+          m_TargetAssemblyTypeName: HealthItem, Assembly-CSharp
+          m_MethodName: OnAdrenaline
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - prefabs: {fileID: 8193805352273905036, guid: 3b0bf363ca37573439099692862c17d4, type: 3}
+    onSelect:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 602736477}
+          m_TargetAssemblyTypeName: HealthItem, Assembly-CSharp
+          m_MethodName: OnBestCondition
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - prefabs: {fileID: 8193805352273905036, guid: ae50d7f6b7e1e2a4e8b7fbbb8191dd89, type: 3}
+    onSelect:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 602736475}
+          m_TargetAssemblyTypeName: PlayerShot, Assembly-CSharp
+          m_MethodName: OnMultiShot
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - prefabs: {fileID: 8193805352273905036, guid: 253b8da0cbea03941b7d2201e79cb215, type: 3}
+    onSelect:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 602736475}
+          m_TargetAssemblyTypeName: PlayerShot, Assembly-CSharp
+          m_MethodName: OnDoubleShot
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - prefabs: {fileID: 8193805352273905036, guid: 6fcdf832941c55f489d9ef4ce33bea56, type: 3}
+    onSelect:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 602736475}
+          m_TargetAssemblyTypeName: PlayerShot, Assembly-CSharp
+          m_MethodName: OnBigShot
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - prefabs: {fileID: 7946499545654079494, guid: 953e14acc23a6d148ac381e75bc9708c, type: 3}
+    onSelect:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 602736477}
+          m_TargetAssemblyTypeName: HealthItem, Assembly-CSharp
+          m_MethodName: StatHPMax0
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - prefabs: {fileID: 7738913078642715919, guid: 424dfbf7bc34bb748b3c32199b246a90, type: 3}
+    onSelect:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 602736475}
+          m_TargetAssemblyTypeName: PlayerShot, Assembly-CSharp
+          m_MethodName: StatATKUpg1
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - prefabs: {fileID: 6733816386254061928, guid: 67d7b2741039ba644a56cb9db9a4d93a, type: 3}
+    onSelect:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 602736475}
+          m_TargetAssemblyTypeName: PlayerShot, Assembly-CSharp
+          m_MethodName: StatATKUpgPlus2
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - prefabs: {fileID: 8457029404922786563, guid: 849c2d704fbb0684186ff374f2aac9b1, type: 3}
+    onSelect:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 602736477}
+          m_TargetAssemblyTypeName: HealthItem, Assembly-CSharp
+          m_MethodName: StatHPUpg3
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - prefabs: {fileID: 7256640264363229660, guid: efde215cb5b950e41b79caf9266f0384, type: 3}
+    onSelect:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 602736477}
+          m_TargetAssemblyTypeName: HealthItem, Assembly-CSharp
+          m_MethodName: StatHPUpgPlus4
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - prefabs: {fileID: 1442262489959492345, guid: b29c87d54f9e0734c884011b50e497d1, type: 3}
+    onSelect:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 602736477}
+          m_TargetAssemblyTypeName: HealthItem, Assembly-CSharp
+          m_MethodName: StatHomeHPHeal5
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - prefabs: {fileID: 1425301987404951175, guid: dfa0a14aafec3ae4883b2e85c16dc874, type: 3}
+    onSelect:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 602736477}
+          m_TargetAssemblyTypeName: HealthItem, Assembly-CSharp
+          m_MethodName: StatHomeHPUpg6
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - prefabs: {fileID: 5336832296027103986, guid: dbca8aec62fd2f247a4a8a343b4eae0c, type: 3}
+    onSelect:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 602736475}
+          m_TargetAssemblyTypeName: PlayerShot, Assembly-CSharp
+          m_MethodName: StatCoolUpg7
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - prefabs: {fileID: 918213162116830182, guid: daab851467f94cf4bae8770e2ce25ddd, type: 3}
+    onSelect:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 602736475}
+          m_TargetAssemblyTypeName: PlayerShot, Assembly-CSharp
+          m_MethodName: StatCoolUpgPlus8
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - prefabs: {fileID: 918213162116830182, guid: daab851467f94cf4bae8770e2ce25ddd, type: 3}
+    onSelect:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 602736475}
+          m_TargetAssemblyTypeName: PlayerShot, Assembly-CSharp
+          m_MethodName: StatCoolUpgPlus8
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - prefabs: {fileID: 918213162116830182, guid: daab851467f94cf4bae8770e2ce25ddd, type: 3}
+    onSelect:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 602736475}
+          m_TargetAssemblyTypeName: PlayerShot, Assembly-CSharp
+          m_MethodName: StatCoolUpgPlus8
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &1644199850
 GameObject:
   m_ObjectHideFlags: 0

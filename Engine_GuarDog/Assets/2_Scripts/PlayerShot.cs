@@ -31,21 +31,21 @@ public class PlayerShot : MonoBehaviour
         isBigShot = true;
     }
 
-    public void StatATKUpg()
+    public void StatATKUpg1()
     {
         var bullet = bulletPrefab.GetComponent<Bullet>();
         bullet.damage += 3; //총알 데미지 증가
     }
-    public void StatATKUpgPlus()
+    public void StatATKUpgPlus2()
     {
         var bullet = bulletPrefab.GetComponent<Bullet>();
         bullet.damage += 5; //총알 데미지 증가
     }
-    public void StatCoolUpg()
+    public void StatCoolUpg7()
     {
         fireCooldown = Mathf.Max(minFireCooldown, fireCooldown - 0.1f); //공격속도 0.1 감소, 최소값 보정
     }
-    public void StatCoolUpgPlus()
+    public void StatCoolUpgPlus8()
     {
         fireCooldown = Mathf.Max(minFireCooldown, fireCooldown - 0.15f); //공격속도 0.15 감소, 최소값 보정
     }

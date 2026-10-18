@@ -1,6 +1,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Events;
+
+[System.Serializable]
+public class UpgradeData
+{
+    public GameObject prefabs;
+    public UnityEvent onSelect; // 선택 시 실행할 이벤트
+}
 
 public class UpgradeManager : MonoBehaviour
 {
@@ -11,7 +19,7 @@ public class UpgradeManager : MonoBehaviour
     public Transform spawnPoint2; // 생성 위치를 지정할 Transform
     public Transform spawnPoint3; // 생성 위치를 지정할 Transform
     [Header("프리팹 리스트 (인스펙터 할당)")]
-    public List<GameObject> prefabs = new List<GameObject>();
+    public UpgradeData[] upgradeData;
 
     private PlayerShot playerShotRef;
     private HealthItem healthItemRef;
@@ -32,150 +40,125 @@ public class UpgradeManager : MonoBehaviour
 
     // 인스펙터 우클릭(또는 컴포넌트 메뉴)에서 실행 가능
     [ContextMenu("Pick Three Unique Numbers And Spawn")]
-    public void UpgradeNumbers() // UpgradePanel을 활성화하고, prefabs 리스트에서 3개의 고유한 숫자를 뽑아 SpawnPickedPrefabs 호출
+    public void UpgradeNumbers()
     {
-        if (UpgradePanel != null) UpgradePanel.SetActive(true);
+        if (UpgradePanel != null)
+            UpgradePanel.SetActive(true);
 
-        int n = prefabs.Count;
+        int n = upgradeData.Length;
+
         if (n == 0)
         {
-            Debug.Log("[UpgradeManager] prefabs 리스트가 비어있습니다.");
+            Debug.Log("업그레이드 리스트가 비어 있습니다.");
             return;
         }
 
-        // 1..n 숫자 풀 생성 (1은 prefabs[0]에 대응)
-        List<int> pool = new List<int>(n);
-        for (int i = 1; i <= n; i++) pool.Add(i);
+        List<int> pool = new List<int>();
 
-        // prefabs.Count > 3 이면 0번(prefabs[0] -> value 1)을 제외
+        for (int i = 1; i <= n; i++)
+            pool.Add(i);
+
+        // 기존 규칙 유지
         if (n > 3)
-        {
-            pool.Remove(1); // value 1 제거 -> prefabs[0] 제외 (기존 규칙 유지)
-        }
+            pool.Remove(1);
 
-        // 이미 제외된 값들은 풀에서 제거 (0 및 7 예외는 ExcludeValue에서 처리되므로 excludedValues에는 추가되지 않음)
         pool.RemoveAll(v => excludedValues.Contains(v));
 
         if (pool.Count == 0)
         {
-            Debug.Log("[UpgradeManager] 선택 가능한 업그레이드가 없습니다(모두 제외됨).");
+            Debug.Log("선택 가능한 업그레이드가 없습니다.");
             return;
         }
 
-        // Fisher-Yates 셔플
         for (int i = pool.Count - 1; i > 0; i--)
         {
             int j = Random.Range(0, i + 1);
-            int tmp = pool[i];
-            pool[i] = pool[j];
-            pool[j] = tmp;
+            (pool[i], pool[j]) = (pool[j], pool[i]);
         }
 
         int take = Mathf.Min(3, pool.Count);
         var picked = pool.GetRange(0, take);
 
-        Debug.Log($"[UpgradeManager] 리스트 길이: {n}. 풀 크기:{pool.Count}. 뽑힌 숫자({take}개): {string.Join(", ", picked)}");
-
         SpawnPickedPrefabs(picked);
     }
 
-    void SpawnPickedPrefabs(List<int> picked) // 뽑힌 숫자에 해당하는 프리팹을 spawnPoint1/2/3에 소환 (지정된 캔버스의 자식으로 생성)
+    void SpawnPickedPrefabs(List<int> picked)
     {
-        Transform[] spawnPoints = new Transform[] { spawnPoint1, spawnPoint2, spawnPoint3 };
-        Transform parent = parentCanvas != null ? parentCanvas.transform : null;
+        Transform[] spawnPoints =
+        {
+            spawnPoint1,
+            spawnPoint2,
+            spawnPoint3
+        };
 
-        // 이전에 생성한 카드 목록 초기화 (새 창 열 때 이전 카드가 있으면 제거되지 않도록 관리)
+        Transform parent = parentCanvas != null
+            ? parentCanvas.transform
+            : null;
+
         spawnedCards.Clear();
         spawnedCardToPrefabIndex.Clear();
 
         for (int i = 0; i < picked.Count && i < spawnPoints.Length; i++)
         {
-            int prefabIndex = picked[i] - 1; // pool은 1-based -> prefabIndex는 0-based
-            if (prefabIndex < 0 || prefabIndex >= prefabs.Count)
+            int prefabIndex = picked[i] - 1;
+
+            if (prefabIndex < 0 || prefabIndex >= upgradeData.Length)
+                continue;
+
+            UpgradeData data = upgradeData[prefabIndex];
+            GameObject prefab = data.prefabs;
+            Transform spawnPoint = spawnPoints[i];
+
+            if (prefab == null || spawnPoint == null)
             {
-                Debug.LogWarning($"[UpgradeManager] 잘못된 인덱스 {prefabIndex} (picked value {picked[i]}).");
+                Debug.LogWarning($"업그레이드 {prefabIndex}의 프리팹 또는 생성 위치가 없습니다.");
                 continue;
             }
 
-            var prefab = prefabs[prefabIndex]; // 0-based 인덱스
-            var spawnPoint = spawnPoints[i];
+            GameObject instance = parent != null
+                ? Instantiate(prefab, spawnPoint.position, spawnPoint.rotation, parent)
+                : Instantiate(prefab, spawnPoint.position, spawnPoint.rotation);
 
-            if (prefab == null)
-            {
-                Debug.LogWarning($"[UpgradeManager] prefab at index {prefabIndex} is null.");
-                continue;
-            }
-
-            if (spawnPoint == null)
-            {
-                Debug.LogWarning($"[UpgradeManager] spawnPoint {i + 1} 가 할당되지 않았습니다. 위치에 소환하지 않습니다.");
-                continue;
-            }
-
-            GameObject instance;
-            if (parent != null)
-            {
-                instance = Instantiate(prefab, spawnPoint.position, spawnPoint.rotation, parent);
-            }
-            else
-            {
-                instance = Instantiate(prefab, spawnPoint.position, spawnPoint.rotation);
-            }
-
-            // 생성된 카드 인스턴스만 추적
             spawnedCards.Add(instance);
             spawnedCardToPrefabIndex[instance] = prefabIndex;
 
-            Debug.Log($"[UpgradeManager] Spawned prefab index {prefabIndex} at spawnPoint {i + 1} as child of {(parent != null ? parent.name : "scene root")}.");
+            Button btn = instance.GetComponentInChildren<Button>();
 
-            // prefabIndex를 0..4 범위의 randvalue로 변환 (0:OnAdrenaline,1:OnBestCondition,2:OnMultiShot,3:OnDoubleShot,4:OnBigShot)
-            int randvalue = prefabIndex % 5;
-
-            // 버튼이 있으면 리스너 할당 (선택 시 능력 적용 후 창 닫음)
-            var btn = instance.GetComponentInChildren<Button>();
             if (btn != null)
             {
-                btn.onClick.RemoveAllListeners();
-                // 인스턴스과 prefabs 원래 인덱스를 전달
-                SwitchCase(randvalue, btn, instance, prefabIndex);
+                int index = prefabIndex;
+                UpgradeData selectedData = data;
+
+                // 기존 방식: onSelect 실행 + 제외 처리 + 창 닫기
+                btn.onClick.AddListener(() =>
+                {
+                    selectedData.onSelect?.Invoke();
+
+                    ExcludeValue(index + 1);
+
+                    CleanupAfterSelection(
+                        selectedData.prefabs.name,
+                        instance
+                    );
+                });
             }
             else
             {
-                Debug.LogWarning("[UpgradeManager] 생성된 인스턴스에 Button 컴포넌트가 없습니다.");
+                Debug.LogWarning("생성된 프리팹에 Button 컴포넌트가 없습니다.");
             }
         }
     }
 
-    // randvalue: 0..4 (0:StatAgainUpgrade, 1:OnRevive, 2:OnAdrenaline, 3:OnBestCondition, 4:OnMultiShot, 5:OnDoubleShot ...)
-    // instance: 클릭된 카드 인스턴스, prefabIndex: 원래 prefabs 리스트 인덱스
+    // SwitchCase는 이제 클릭 시 '창 닫기' 로직만 수행하도록 변경
     public void SwitchCase(int randvalue, Button button, GameObject instance, int prefabIndex)
     {
-        // 버튼 클릭 시 능력 적용과 창 닫기를 수행할 래퍼를 연결
         button.onClick.RemoveAllListeners();
-        switch (randvalue)
+        // 클릭하면 선택 이벤트 적용은 다른 경로(UpgradeData.onSelect)에서 처리되고,
+        // 여기서는 오직 창 닫기(및 카드 정리)만 수행합니다.
+        button.onClick.AddListener(() =>
         {
-            case 0:
-                button.onClick.AddListener(() => { StatAgainUpgrade(); ExcludeValue(prefabIndex + 1); CleanupAfterSelection("StatAgainUpgrade", instance); });
-                break;
-            case 1:
-                button.onClick.AddListener(() => { OnRevive(); ExcludeValue(prefabIndex + 1); CleanupAfterSelection("OnRevive", instance); });
-                break;
-            case 2:
-                button.onClick.AddListener(() => { OnAdrenaline(); ExcludeValue(prefabIndex + 1); CleanupAfterSelection("OnAdrenaline", instance); });
-                break;
-            case 3:
-                button.onClick.AddListener(() => { OnBestCondition(); ExcludeValue(prefabIndex + 1); CleanupAfterSelection("OnBestCondition", instance); });
-                break;
-            case 4:
-                button.onClick.AddListener(() => { OnMultiShot(); ExcludeValue(prefabIndex + 1); CleanupAfterSelection("OnMultiShot", instance); });
-                break;
-            case 5:
-                button.onClick.AddListener(() => { OnDoubleShot(); ExcludeValue(prefabIndex + 1); CleanupAfterSelection("OnDoubleShot", instance); });
-                break;
-            default:
-                Debug.LogWarning($"[UpgradeManager] SwitchCase: 알 수 없는 randvalue {randvalue}");
-                break;
-        }
+            CleanupAfterSelection("Selected", instance);
+        });
     }
 
     // 선택된 1-based 값을 제외 목록에 추가 (다음 뽑기에서 제외)
@@ -202,7 +185,6 @@ public class UpgradeManager : MonoBehaviour
         if (healthItemRef == null) healthItemRef = FindObjectOfType<HealthItem>();
         if (playerShotRef == null) playerShotRef = FindObjectOfType<PlayerShot>();
 
-        // PlayerShot prefab 및 이미 생성된 총알들에 데미지 +3 적용
         if (playerShotRef != null && playerShotRef.bulletPrefab != null)
         {
             var prefabBullet = playerShotRef.bulletPrefab.GetComponent<Bullet>();
@@ -221,56 +203,6 @@ public class UpgradeManager : MonoBehaviour
         {
             healthItemRef.PlayerHealth.maxHP += 25;
             healthItemRef.PlayerHealth.Heal(999);
-        }
-    }
-
-    public void OnRevive()
-    {
-        if (healthItemRef == null) healthItemRef = FindObjectOfType<HealthItem>();
-        if (healthItemRef != null)
-        {
-            healthItemRef.OnRevieve();
-            Debug.Log("[UpgradeManager] OnRevive applied.");
-        }
-    }
-
-    public void OnAdrenaline()
-    {
-        if (healthItemRef == null) healthItemRef = FindObjectOfType<HealthItem>();
-        if (healthItemRef != null)
-        {
-            healthItemRef.OnAdrenaline();
-            Debug.Log("[UpgradeManager] OnAdrenaline applied.");
-        }
-    }
-
-    public void OnBestCondition()
-    {
-        if (healthItemRef == null) healthItemRef = FindObjectOfType<HealthItem>();
-        if (healthItemRef != null)
-        {
-            healthItemRef.OnBestCondition();
-            Debug.Log("[UpgradeManager] OnBestCondition applied.");
-        }
-    }
-
-    public void OnMultiShot()
-    {
-        if (playerShotRef == null) playerShotRef = FindObjectOfType<PlayerShot>();
-        if (playerShotRef != null)
-        {
-            playerShotRef.OnMultiShot();
-            Debug.Log("[UpgradeManager] OnMultiShot applied.");
-        }
-    }
-
-    public void OnDoubleShot()
-    {
-        if (playerShotRef == null) playerShotRef = FindObjectOfType<PlayerShot>();
-        if (playerShotRef != null)
-        {
-            playerShotRef.OnDoubleShot();
-            Debug.Log("[UpgradeManager] OnDoubleShot applied.");
         }
     }
 

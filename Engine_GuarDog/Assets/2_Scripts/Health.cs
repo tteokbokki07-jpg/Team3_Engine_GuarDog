@@ -37,7 +37,7 @@ public class Health : MonoBehaviour
         if (currentHP <= 0) return;
 
         currentHP -= damage;
-        Debug.Log(name + " HP: " + currentHP + " / " + maxHP + "Damage Taken: " + damage);
+        Debug.Log(name + " HP: " + currentHP + " / " + maxHP + " 받은피해: " + damage);
         UpdateBar();
         UpdateHPText();
 

@@ -78,36 +78,30 @@ public class HealthItem : MonoBehaviour
         isMaxHP = PlayerHealth.isMaxHP;
     }
 
-    public void OnRevive()
-    {
-        var health = FindObjectOfType<Health>();
-        health.Revieve();
-    }
-
-    public void StatHPMax()
+    public void StatHPMax0()
     {
         PlayerHealth.Heal(999); // 현재 체력을 최대 체력으로 회복
     }
-    public void StatHPUpg()
+    public void StatHPUpg3()
     {
         PlayerHealth.maxHP += 30; // 최대 체력 증가
         PlayerHealth.Heal(80); // 증가한 만큼 + 추가 회복
     }
-    public void StatHPUpgPlus()
+    public void StatHPUpgPlus4()
     {
         PlayerHealth.maxHP += 50; // 최대 체력 증가
         PlayerHealth.Heal(140); // 증가한 만큼 + 추가 회복
     }
-    public void StatHomeHPHeal()
+    public void StatHomeHPHeal5()
     {
         HomeHealth.Heal(50); // 회복
     }
-    public void StatHomeHPUpg()
+    public void StatHomeHPUpg6()
     {
         HomeHealth.maxHP += 100; // 최대 체력 증가
         HomeHealth.Heal(100); // 증가한 만큼 회복
     }
-    public void StatAgainUpgrade()
+    public void OnAgainUpgrade()
     {
         var prefabBullet = playerShotRef.bulletPrefab.GetComponent<Bullet>();
         prefabBullet.damage += 3; //총알 데미지 증가
