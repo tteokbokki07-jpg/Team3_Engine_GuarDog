@@ -275,10 +275,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Health
   maxHP: 25
-  currentHP: 0
+  currentHP: 25
   hpSlider: {fileID: 5031110459465914936}
   HPText: {fileID: 0}
   isMaxHP: 1
+  gameManager: {fileID: 0}
+  healthItem: {fileID: 0}
 --- !u!54 &3178119208013632098
 Rigidbody:
   m_ObjectHideFlags: 0

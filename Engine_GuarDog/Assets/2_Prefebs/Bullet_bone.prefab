@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 779320419173521438}
   m_Layer: 0
   m_Name: Bullet_bone
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -107,6 +107,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Bullet
   damage: 3
+  moredamage: 0
   lifeTime: 1
   targetTag: Enemy
   ownerTag: Player

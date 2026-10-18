@@ -84,7 +84,7 @@ public class HealthItem : MonoBehaviour
     }
     public void StatHPUpg3()
     {
-        PlayerHealth.maxHP += 30; // 최대 체력 증가
+        PlayerHealth.maxHP += 25; // 최대 체력 증가
         PlayerHealth.Heal(80); // 증가한 만큼 + 추가 회복
     }
     public void StatHPUpgPlus4()
@@ -104,9 +104,10 @@ public class HealthItem : MonoBehaviour
     public void OnAgainUpgrade()
     {
         var prefabBullet = playerShotRef.bulletPrefab.GetComponent<Bullet>();
-        prefabBullet.damage += 3; //총알 데미지 증가
+        prefabBullet.moredamage += 3; //총알 추가 데미지 증가
         PlayerHealth.maxHP += 25; // 최대 체력 증가
         PlayerHealth.Heal(999); // 체력 회복
+        playerShotRef.fireCooldown -= 0.05f; // 발사 속도 증가
     }
 
     IEnumerator AdrenalineCoroutine()
@@ -143,7 +144,7 @@ public class HealthItem : MonoBehaviour
         var bullets = FindObjectsOfType<Bullet>();
         foreach (var b in bullets)
         {
-            b.damage += amount;
+            b.moredamage += amount;
         }
 
         if (playerShotRef != null && playerShotRef.bulletPrefab != null)
@@ -151,7 +152,7 @@ public class HealthItem : MonoBehaviour
             var prefabBullet = playerShotRef.bulletPrefab.GetComponent<Bullet>();
             if (prefabBullet != null)
             {
-                prefabBullet.damage += amount;
+                prefabBullet.moredamage += amount;
             }
         }
     }
@@ -162,7 +163,7 @@ public class HealthItem : MonoBehaviour
         var bullets = FindObjectsOfType<Bullet>();
         foreach (var b in bullets)
         {
-            b.damage = Mathf.Max(0, b.damage - amount);
+            b.moredamage = Mathf.Max(0, b.moredamage - amount);
         }
 
         if (playerShotRef != null && playerShotRef.bulletPrefab != null)
@@ -170,7 +171,7 @@ public class HealthItem : MonoBehaviour
             var prefabBullet = playerShotRef.bulletPrefab.GetComponent<Bullet>();
             if (prefabBullet != null)
             {
-                prefabBullet.damage = Mathf.Max(0, prefabBullet.damage - amount);
+                prefabBullet.moredamage = Mathf.Max(0, prefabBullet.moredamage - amount);
             }
         }
     }
@@ -213,7 +214,7 @@ public class HealthItem : MonoBehaviour
         var bullets = FindObjectsOfType<Bullet>();
         foreach (var b in bullets)
         {
-            b.damage += amount;
+            b.moredamage += amount;
         }
 
         if (playerShotRef != null && playerShotRef.bulletPrefab != null)
@@ -221,7 +222,7 @@ public class HealthItem : MonoBehaviour
             var prefabBullet = playerShotRef.bulletPrefab.GetComponent<Bullet>();
             if (prefabBullet != null)
             {
-                prefabBullet.damage += amount;
+                prefabBullet.moredamage += amount;
             }
         }
     }
@@ -231,7 +232,7 @@ public class HealthItem : MonoBehaviour
         var bullets = FindObjectsOfType<Bullet>();
         foreach (var b in bullets)
         {
-            b.damage = Mathf.Max(0, b.damage - amount);
+            b.moredamage = Mathf.Max(0, b.moredamage - amount);
         }
 
         if (playerShotRef != null && playerShotRef.bulletPrefab != null)
@@ -239,7 +240,7 @@ public class HealthItem : MonoBehaviour
             var prefabBullet = playerShotRef.bulletPrefab.GetComponent<Bullet>();
             if (prefabBullet != null)
             {
-                prefabBullet.damage = Mathf.Max(0, prefabBullet.damage - amount);
+                prefabBullet.moredamage = Mathf.Max(0, prefabBullet.moredamage - amount);
             }
         }
     }

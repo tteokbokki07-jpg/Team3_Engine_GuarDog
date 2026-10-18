@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -30,7 +31,7 @@ public class UpgradeManager : MonoBehaviour
     private readonly Dictionary<GameObject, int> spawnedCardToPrefabIndex = new Dictionary<GameObject, int>();
 
     // 한 번 선택된 번호(1-based)를 다시 뽑지 않도록 저장
-    private readonly HashSet<int> excludedValues = new HashSet<int>();
+    public readonly HashSet<int> excludedValues = new HashSet<int>();
 
     void Awake()
     {
@@ -54,15 +55,19 @@ public class UpgradeManager : MonoBehaviour
         }
 
         List<int> pool = new List<int>();
-
+        // 1-based 번호 생성
         for (int i = 1; i <= n; i++)
             pool.Add(i);
 
-        // 기존 규칙 유지
-        if (n > 3)
-            pool.Remove(1);
-
+        // excludedValues 먼저 제거한 뒤, 실제 후보 수가 3보다 크면 1번을 제외
         pool.RemoveAll(v => excludedValues.Contains(v));
+
+        if (pool.Count > 3)
+        {
+            // 1번이 후보에 있으면 제거
+            if (pool.Remove(1))
+                Debug.Log("1번제외됨");
+        }
 
         if (pool.Count == 0)
         {
@@ -70,15 +75,36 @@ public class UpgradeManager : MonoBehaviour
             return;
         }
 
-        for (int i = pool.Count - 1; i > 0; i--)
+        // 고유한 숫자 선택 (중복 발생 시 재추첨 방지)
+        int take = Mathf.Min(3, pool.Count);
+        List<int> picked = new List<int>();
+        int maxAttempts = 100;
+        int attempts = 0;
+        while (picked.Count < take && pool.Count > 0 && attempts < maxAttempts)
         {
-            int j = Random.Range(0, i + 1);
-            (pool[i], pool[j]) = (pool[j], pool[i]);
+            attempts++;
+            int idx = UnityEngine.Random.Range(0, pool.Count);
+            int val = pool[idx];
+
+            if (picked.Contains(val))
+            {
+                // 중복이면 건너뛰고 다시 시도
+                continue;
+            }
+
+            picked.Add(val);
+            // 이미 뽑은 값은 pool에서 제거하여 재등장 방지
+            pool.RemoveAt(idx);
         }
 
-        int take = Mathf.Min(3, pool.Count);
-        var picked = pool.GetRange(0, take);
+        if (attempts >= maxAttempts)
+            Debug.LogWarning("[UpgradeManager] Unique selection attempts exceeded limit.");
 
+        // 선택 결과 로그
+        var pickedStrings = picked.ConvertAll(p => p.ToString()).ToArray();
+        Debug.Log($"[UpgradeManager] Picked numbers: {string.Join(", ", pickedStrings)}");
+
+        // 셔플된 순서가 필요하면 이미 무작위로 뽑았으므로 바로 사용
         SpawnPickedPrefabs(picked);
     }
 
@@ -180,31 +206,31 @@ public class UpgradeManager : MonoBehaviour
     }
 
     // 각 능력 구현 (playerShot/healthItem 안전 참조)
-    public void StatAgainUpgrade()
-    {
-        if (healthItemRef == null) healthItemRef = FindObjectOfType<HealthItem>();
-        if (playerShotRef == null) playerShotRef = FindObjectOfType<PlayerShot>();
+    //public void StatAgainUpgrade()
+    //{
+    //    if (healthItemRef == null) healthItemRef = FindObjectOfType<HealthItem>();
+    //    if (playerShotRef == null) playerShotRef = FindObjectOfType<PlayerShot>();
 
-        if (playerShotRef != null && playerShotRef.bulletPrefab != null)
-        {
-            var prefabBullet = playerShotRef.bulletPrefab.GetComponent<Bullet>();
-            if (prefabBullet != null)
-            {
-                prefabBullet.damage += 3;
-                Debug.Log("[UpgradeManager] Prefab bullet damage increased by 3.");
-            }
-        }
+    //    if (playerShotRef != null && playerShotRef.bulletPrefab != null)
+    //    {
+    //        var prefabBullet = playerShotRef.bulletPrefab.GetComponent<Bullet>();
+    //        if (prefabBullet != null)
+    //        {
+    //            prefabBullet.moredamage += 3;
+    //            Debug.Log("[UpgradeManager] Prefab bullet damage increased by 3.");
+    //        }
+    //    }
 
-        var bullets = FindObjectsOfType<Bullet>();
-        foreach (var b in bullets) b.damage += 3;
-        Debug.Log($"[UpgradeManager] Scene bullets damage increased by 3 (count: {bullets.Length}).");
+    //    var bullets = FindObjectsOfType<Bullet>();
+    //    foreach (var b in bullets) b.moredamage += 3;
+    //    Debug.Log($"[UpgradeManager] Scene bullets damage increased by 3 (count: {bullets.Length}).");
 
-        if (healthItemRef != null && healthItemRef.PlayerHealth != null)
-        {
-            healthItemRef.PlayerHealth.maxHP += 25;
-            healthItemRef.PlayerHealth.Heal(999);
-        }
-    }
+    //    if (healthItemRef != null && healthItemRef.PlayerHealth != null)
+    //    {
+    //        healthItemRef.PlayerHealth.maxHP += 25;
+    //        healthItemRef.PlayerHealth.Heal(999);
+    //    }
+    //}
 
     // 선택 후 정리: 이번에 생성한 카드 인스턴스들만 파괴하고 UpgradePanel 비활성화
     void CleanupAfterSelection(string abilityName, GameObject selectedInstance)

@@ -3,6 +3,7 @@ using UnityEngine;
 public class Bullet : MonoBehaviour
 {
     public int damage = 1;
+    public int moredamage = 0; //추가 데미지
     public float lifeTime = 2f; //총알이 사라질 시간
     public string targetTag = "Enemy"; //맞을 대상 태그
     public string ownerTag = "Player"; //발사자 태그(본인 통과)
@@ -29,7 +30,7 @@ public class Bullet : MonoBehaviour
         if (other.CompareTag(targetTag)) //맞은 대상이 targetTag일 때
         {
             Health hp = other.GetComponent<Health>(); //맞은 대상의 Health 스크립트 가져오기
-            if (hp != null) hp.TakeDamage(damage); //맞은 대상의 체력 감소
+            if (hp != null) hp.TakeDamage(damage + moredamage); //맞은 대상의 체력 감소
         }
         
         // isBigShot이면 관통(파괴하지 않음), 아니면 충돌 시 파괴

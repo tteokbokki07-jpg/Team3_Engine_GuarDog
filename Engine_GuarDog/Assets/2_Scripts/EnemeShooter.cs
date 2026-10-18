@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class EnemyShooter : MonoBehaviour
@@ -11,6 +12,10 @@ public class EnemyShooter : MonoBehaviour
     public float fireInterval = 2f; // 발사 간격
     public float bulletSpeed = 10f;
     public bool goHome = false; //플레이어가 추적 범위에 없을때 집 추격
+    [Header("변종관리")]
+    public bool isBigType = false; // 큰 적 여부
+    public bool EnemyisMultiShot = false; // 멀티샷 여부
+    public bool EnemyisDoubleShot = false; // 더블샷 여부
 
     Transform player;
     Transform home;
@@ -33,7 +38,6 @@ public class EnemyShooter : MonoBehaviour
         }
         currentTarget = player != null ? player : home;
         lastFireTime = Time.time;
-
     }
 
     void Update()
@@ -106,7 +110,9 @@ public class EnemyShooter : MonoBehaviour
             if (inRange && ready)
             {
                 lastFireTime = Time.time;
-                Shoot(player.position + Vector3.up * 1f, "Player");
+                // 첫 발사에서는 현재 시점의 플레이어 위치를 전달
+                Vector3 currentPlayerTarget = player.position + Vector3.up * 1f;
+                FireBurst(currentPlayerTarget, "Player", false);
             }
 
             return;
@@ -126,11 +132,9 @@ public class EnemyShooter : MonoBehaviour
             if (inRangeHome && readyHome)
             {
                 lastFireTime = Time.time;
-                // 홈의 콜라이더 표면을 목표로 발사 (Start에서 가져온 homeCollider 사용)
                 Vector3 homeTarget;
                 if (homeCollider != null)
                 {
-                    // 발사 지점(firePoint) 기준으로 콜라이더에서 가장 가까운 지점을 목표로 함
                     homeTarget = homeCollider.ClosestPoint(firePoint.position);
                 }
                 else if (home != null)
@@ -141,16 +145,19 @@ public class EnemyShooter : MonoBehaviour
                 {
                     homeTarget = closestPoint + Vector3.up * 1f;
                 }
-                Shoot(homeTarget, "Home");
+                FireBurst(homeTarget, "Home", false);
             }
         }
     }
 
-    void Shoot(Vector3 target, string targetTag)
+    // 여러 탄환을 한 번에 발사 (멀티샷 / 더블샷 지원)
+    void FireBurst(Vector3 target, string targetTag, bool isSecondary)
     {
-        Vector3 dir = (target - firePoint.position).normalized;
+        Vector3 baseDir = (target - firePoint.position).normalized;
+        // 멀티샷이면 -15,0,15도 각도로 발사, 아니면 정면 0도만
+        float[] angles = EnemyisMultiShot ? new float[] { -15f, 0f, 15f } : new float[] { 0f };
 
-        // Determine base damage from the bullet prefab's Bullet component (do not use local damage field)
+        // Determine base damage from the bullet prefab's Bullet component
         int baseDamage = 1;
         if (bulletPrefab != null)
         {
@@ -158,23 +165,62 @@ public class EnemyShooter : MonoBehaviour
             if (prefabBullet != null) baseDamage = prefabBullet.damage;
         }
 
-        GameObject bullet = Instantiate(bulletPrefab,
-            firePoint.position, Quaternion.LookRotation(dir));
-        Rigidbody rb = bullet.GetComponent<Rigidbody>();
-        if (rb != null)
+        foreach (float angle in angles)
         {
-            rb.linearVelocity = dir * bulletSpeed;
+            Quaternion rot = Quaternion.LookRotation(baseDir) * Quaternion.Euler(0f, angle, 0f);
+            GameObject bullet = Instantiate(bulletPrefab, firePoint.position, rot);
+            Rigidbody rb = bullet.GetComponent<Rigidbody>();
+            if (rb != null)
+            {
+                rb.linearVelocity = rot * Vector3.forward * bulletSpeed;
+            }
+
+            Bullet b = bullet.GetComponent<Bullet>();
+            if (b != null)
+            {
+                b.targetTag = targetTag;
+                b.damage = (targetTag == "Home") ? baseDamage * 2 : baseDamage;
+                b.ownerTag = string.IsNullOrEmpty(gameObject.tag) ? "Enemy" : gameObject.tag;
+                // 멀티샷/더블샷 변종에 따라 추가 설정(예: 큰 총알) 처리 가능
+                if (isBigType)
+                {
+                    b.isBigShot = true;
+                }
+            }
         }
 
-        // Configure instantiated bullet: use prefab baseDamage and double for Home
-        Bullet b = bullet.GetComponent<Bullet>();
-        if (b != null)
+        // 더블샷이면 0.2초 뒤에 다시 발사하되, 두번째 발사는 '현재 시점'의 타겟 위치를 사용
+        if (EnemyisDoubleShot && !isSecondary)
         {
-            b.targetTag = targetTag;
-            b.damage = (targetTag == "Home") ? baseDamage * 2 : baseDamage;
-            b.ownerTag = string.IsNullOrEmpty(gameObject.tag) ? "Enemy" : gameObject.tag;
+            StartCoroutine(DoubleBurstCoroutine(0.5f, targetTag));
         }
     }
 
+    IEnumerator DoubleBurstCoroutine(float delay, string targetTag)
+    {
+        yield return new WaitForSeconds(delay);
+        if (Time.timeScale == 0f) yield break;
 
+        // 두번째 발사는 발사 시점(지금)의 타겟 위치를 재계산해서 사용
+        Vector3 secondTarget;
+        if (targetTag == "Player")
+        {
+            if (player != null)
+                secondTarget = player.position + Vector3.up * 1f;
+            else
+                secondTarget = firePoint.position + transform.forward; // fallback
+        }
+        else // "Home"
+        {
+            if (homeCollider != null)
+                secondTarget = homeCollider.ClosestPoint(firePoint.position);
+            else if (home != null)
+                secondTarget = home.position + Vector3.up * 1f;
+            else
+                secondTarget = firePoint.position + transform.forward;
+        }
+
+        // isSecondary=true로 호출하여 추가 재스케줄 방지
+        FireBurst(secondTarget, targetTag, true);
+    }
 }

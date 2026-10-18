@@ -242,7 +242,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.5, y: 2, z: 1.5}
+  m_Size: {x: 1.5, y: 2, z: 2.25}
   m_Center: {x: 0, y: 1, z: 0}
 --- !u!114 &8989993710113736706
 MonoBehaviour:
@@ -275,11 +275,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Health
   maxHP: 40
-  currentHP: 0
+  currentHP: 40
   hpSlider: {fileID: 5031110459465914936}
   HPText: {fileID: 0}
   isMaxHP: 1
   gameManager: {fileID: 0}
+  healthItem: {fileID: 0}
 --- !u!54 &3178119208013632098
 Rigidbody:
   m_ObjectHideFlags: 0

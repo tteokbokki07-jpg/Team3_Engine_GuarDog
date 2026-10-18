@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour
     [Header("낮밤 설정")]
     public Light directionalLight;
     public float transitionSpeed = 1f;
+    public bool isDefence = true;
     [Header("게임 적 관리 설정")]
     public float EnemyCount = 0f; // 현재 씬에 존재하는 적의 수
     public int KillCount = 0; // 플레이어가 처치한 적의 수
@@ -38,8 +39,8 @@ public class GameManager : MonoBehaviour
             targetIntensity = directionalLight.intensity;
         }
 
-        // 초기 낮/밤 결정 및 적용
-        isDay = (EnemyCount == 0);
+        // isDefence 값에 따라 낮/밤 결정 (isDefence == true -> 밤, false -> 낮)
+        isDay = !isDefence;
         lastIsDay = !isDay;
         ApplyDayNightImmediate(isDay);
     }
@@ -51,9 +52,8 @@ public class GameManager : MonoBehaviour
         if (uimanager != null)
             uimanager.GetComponent<UImanager>();
 
-
-        // 적 유무로 낮/밤 결정 (적 있음 -> 밤(false), 적 없음 -> 낮(true))
-        bool newIsDay = (EnemyCount == 0);
+        // isDefence 값에 따라 낮/밤 결정 (isDefence == true -> 밤(false), false -> 낮(true))
+        bool newIsDay = !isDefence;
         if (newIsDay != lastIsDay)
         {
             lastIsDay = newIsDay;
@@ -87,10 +87,10 @@ public class GameManager : MonoBehaviour
             targetColor = directionalLight.color;
             targetIntensity = directionalLight.intensity;
 
-            // 낮이 되는 로직: 3초 뒤에 UImanager.GameClear() 호출
-            if (dayClearRoutine != null) StopCoroutine(dayClearRoutine);
-            if (uimanager != null)
-                dayClearRoutine = StartCoroutine(CallGameClearAfterDelay(3f));
+            //// 낮이 되는 로직: 3초 뒤에 UImanager.GameClear() 호출
+            //if (dayClearRoutine != null) StopCoroutine(dayClearRoutine);
+            //if (uimanager != null)
+            //    dayClearRoutine = StartCoroutine(CallGameClearAfterDelay(3f));
         }
         else
         {
@@ -112,23 +112,12 @@ public class GameManager : MonoBehaviour
     {
         targetColor = Color.white;
         targetIntensity = 3f;
-
-        // 낮으로 전환 시에도 GameClear 예약 (서서히 보간 중일 때 적용)
-        if (dayClearRoutine != null) StopCoroutine(dayClearRoutine);
-        if (uimanager != null)
-            dayClearRoutine = StartCoroutine(CallGameClearAfterDelay(3f));
     }
 
     void SetNightTargets()
     {
         targetColor = new Color32(8, 136, 254, 255);
         targetIntensity = 1f;
-
-        if (dayClearRoutine != null)
-        {
-            StopCoroutine(dayClearRoutine);
-            dayClearRoutine = null;
-        }
     }
 
     System.Collections.IEnumerator CallGameClearAfterDelay(float delay)

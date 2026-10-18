@@ -16,6 +16,9 @@ public class EnemeChaser : MonoBehaviour
     Collider homeCollider;
     float lastAttackTime = -999f;
 
+    // 플레이어 공격 후 이동 일시정지 시간 저장
+    private float movementPauseUntil = 0f;
+
     void Start()
     {
         GameObject p = GameObject.FindWithTag("Player");
@@ -96,14 +99,25 @@ public class EnemeChaser : MonoBehaviour
         {
             if (distance > attackRange)
             {
-                float move = moveSpeed * Time.deltaTime;
-                transform.position += transform.forward * move;
+                // 플레이어를 공격한 직후(일시정지 시간)라면 이동하지 않음
+                if (Time.time < movementPauseUntil)
+                {
+                    // 이동 일시정지 상태: 아무 동작(대기)
+                }
+                else
+                {
+                    float move = moveSpeed * Time.deltaTime;
+                    transform.position += transform.forward * move;
+                }
             }
             else if (Time.time >= lastAttackTime + attackCooldown)
             {
                 lastAttackTime = Time.time;
                 var hp = player.GetComponent<Health>();
                 if (hp != null) hp.TakeDamage(damage); // 플레이어는 1배 피해
+
+                // 공격 후 1초간 이동 멈춤
+                movementPauseUntil = Time.time + 1f;
             }
             return;
         }
@@ -113,7 +127,6 @@ public class EnemeChaser : MonoBehaviour
         {
             if (distance > attackRange)
             {
-                // 집으로 이동
                 float move = moveSpeed * Time.deltaTime;
                 transform.position += transform.forward * move;
             }
@@ -126,9 +139,4 @@ public class EnemeChaser : MonoBehaviour
             }
         }
     }
-
-
-
-
-
 }

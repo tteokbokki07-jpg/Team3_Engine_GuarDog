@@ -8,6 +8,8 @@ public class PlayerShot : MonoBehaviour
 {
     public GameObject bulletPrefab; //총알 프리팹
     public Transform firePoint; //총알 발사 위치
+    public bool isClick = false;
+    public int damagepoint = 0; //총알 데미지 증가량(확인용)
     public float bulletSpeed = 20f; //총알 속도
     public float fireCooldown = 0.4f; //연사 속도
     public float minFireCooldown = 0.05f; //최소 연사 속도
@@ -34,12 +36,12 @@ public class PlayerShot : MonoBehaviour
     public void StatATKUpg1()
     {
         var bullet = bulletPrefab.GetComponent<Bullet>();
-        bullet.damage += 3; //총알 데미지 증가
+        bullet.moredamage += 3; //총알 데미지 증가
     }
     public void StatATKUpgPlus2()
     {
         var bullet = bulletPrefab.GetComponent<Bullet>();
-        bullet.damage += 5; //총알 데미지 증가
+        bullet.moredamage += 5; //총알 데미지 증가
     }
     public void StatCoolUpg7()
     {
@@ -55,14 +57,39 @@ public class PlayerShot : MonoBehaviour
     {
         if (CoolDownImage != null)
             CoolDownImage.fillAmount = 1f;
+        if (bulletPrefab != null)
+        {
+            var bullet = bulletPrefab.GetComponent<Bullet>();
+            if (bullet != null)
+                bullet.moredamage = 0; // 초기 추가 데미지 설정
+        }
     }
 
     void Update()
     {
+        // 마우스 왼쪽 클릭 상태 반영: 누르면 true, 떼면 false
+        if (Input.GetMouseButtonDown(0))
+            isClick = true;
+        else if (Input.GetMouseButtonUp(0))
+            isClick = false;
+
+        // isClick 동안 쿨다운 검사 후 공격 시도
+        if (isClick)
+        {
+            TryAttack();
+        }
+
+        if (bulletPrefab != null)
+        {
+            var bullet = bulletPrefab.GetComponent<Bullet>();
+            if (bullet != null)
+                damagepoint = bullet.moredamage; //총알 추가 데미지 확인
+        }
+
         // 최소 연사속도 보정: fireCooldown이 minFireCooldown보다 작아지지 않도록 유지
         fireCooldown = Mathf.Max(minFireCooldown, fireCooldown);
 
-        // 쿨다운 진행에 따라 이미지 채우기 (fireCooldown이 0이면 항상 준비 상태)
+        // 쿨다운 진행에 따라 이미지 채우기
         if (CoolDownImage != null)
         {
             if (fireCooldown <= 0f)
@@ -74,13 +101,20 @@ public class PlayerShot : MonoBehaviour
                 float elapsed = Time.time - lastFireTime;
                 if (elapsed < 0f) elapsed = 0f;
                 float progress = Mathf.Clamp01(elapsed / fireCooldown);
-                // 발사 직후 0에서 시작해 쿨다운이 끝나면 1이 되도록 설정
                 CoolDownImage.fillAmount = progress;
             }
         }
     }
 
-    public void OnAttack(InputValue value) //유니티 인풋 시스템의 공격 입력 이벤트 처리
+    // Input System 이벤트에서도 동일 로직 사용
+    public void OnAttack(InputValue value)
+    {
+        // 입력 이벤트로 즉시 한 발 발사(또는 입력 바인딩에 따라 호출)
+        TryAttack();
+    }
+
+    // 쿨다운 검사 및 발사 처리를 담당 (공통)
+    void TryAttack()
     {
         if (Time.timeScale == 0f) return; //게임 일시정지 시 공격 무시
         if (Time.time < lastFireTime + fireCooldown) return; //연사 속도 제한
@@ -89,10 +123,9 @@ public class PlayerShot : MonoBehaviour
         if (CoolDownImage != null)
             CoolDownImage.fillAmount = 0f;
 
-        // 실제 발사 처리
         FireBullets();
 
-        // isDoubleShot이면 0.2초 뒤에 한 번 더 자동 발사
+        // 더블샷이면 지연 발사
         if (isDoubleShot)
         {
             StartCoroutine(DoubleShotCoroutine(0.2f));
@@ -114,14 +147,14 @@ public class PlayerShot : MonoBehaviour
                 rb.linearVelocity = dir * bulletSpeed; //총알 발사
             }
 
-            // 생성된 총알의 damage 값을 조정 (인스턴스 수준)
+            // 생성된 총알의 추가 데미지 값을 조정 (인스턴스 수준)
             var bulletComp = bullet.GetComponent<Bullet>();
             if (bulletComp != null)
             {
                 int reduction = 0;
                 if (isMultiShot) reduction += 1;
                 if (isDoubleShot) reduction += 1;
-                bulletComp.damage = Mathf.Max(0, bulletComp.damage - reduction);
+                bulletComp.moredamage = Mathf.Max(0, bulletComp.moredamage - reduction);
 
                 // 관통 여부 전달
                 bulletComp.isBigShot = isBigShot;
@@ -133,7 +166,6 @@ public class PlayerShot : MonoBehaviour
     {
         yield return new WaitForSeconds(delay); //지연 시간 대기
         if (Time.timeScale == 0f) yield break; //일시정지 상태면 취소
-        // 두 번째 샷은 쿨타임 검사 없이 즉시 발사
 
         if (CoolDownImage != null)
             CoolDownImage.fillAmount = 0f;
