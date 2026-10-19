@@ -43,10 +43,10 @@ public class PlayerController : MonoBehaviour
             verticalVelocity = jumpPower;
         }
     }
-    public void OnSprint(InputValue value)
-    {
-        isRunning = value.isPressed;
-    }
+    //public void OnSprint(InputValue value)
+    //{
+    //    isRunning = value.isPressed;
+    //}
 
     // 외부에서 카메라 입력 허용/차단
     public void SetLookEnabled(bool enabled)

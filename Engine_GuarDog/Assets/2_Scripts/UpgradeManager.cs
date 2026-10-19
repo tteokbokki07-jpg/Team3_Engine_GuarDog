@@ -22,6 +22,9 @@ public class UpgradeManager : MonoBehaviour
     [Header("프리팹 리스트 (인스펙터 할당)")]
     public UpgradeData[] upgradeData;
 
+    // Upgrade UI 참조 (인스펙터 할당 가능, 없으면 Awake에서 Find)
+    public UpgradeUI upgradeUI;
+
     private PlayerShot playerShotRef;
     private HealthItem healthItemRef;
 
@@ -37,6 +40,9 @@ public class UpgradeManager : MonoBehaviour
     {
         playerShotRef = FindObjectOfType<PlayerShot>();
         healthItemRef = FindObjectOfType<HealthItem>();
+
+        if (upgradeUI == null)
+            upgradeUI = FindObjectOfType<UpgradeUI>();
     }
 
     // 인스펙터 우클릭(또는 컴포넌트 메뉴)에서 실행 가능
@@ -104,7 +110,7 @@ public class UpgradeManager : MonoBehaviour
         var pickedStrings = picked.ConvertAll(p => p.ToString()).ToArray();
         Debug.Log($"[UpgradeManager] Picked numbers: {string.Join(", ", pickedStrings)}");
 
-        // 셔플된 순서가 필요하면 이미 무작위로 뽑았으므로 바로 사용
+        // UI로는 지금 '랜덤 뽑힌 숫자'를 전달하지 않음.
         SpawnPickedPrefabs(picked);
     }
 
@@ -152,13 +158,16 @@ public class UpgradeManager : MonoBehaviour
 
             if (btn != null)
             {
-                int index = prefabIndex;
+                int index = prefabIndex; // 0-based
                 UpgradeData selectedData = data;
 
-                // 기존 방식: onSelect 실행 + 제외 처리 + 창 닫기
+                // 클릭 시: 선택 이벤트 실행, UI에 '선택된 카드 인덱스(1-based)' 전달, 제외 처리, 창 닫기
                 btn.onClick.AddListener(() =>
                 {
                     selectedData.onSelect?.Invoke();
+
+                    // UpgradeUI로 전달: 선택한 카드의 인덱스 번호(1-based)
+                    upgradeUI?.SetPickedNumbers(new List<int> { index + 1 });
 
                     ExcludeValue(index + 1);
 
