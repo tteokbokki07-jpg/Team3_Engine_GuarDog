@@ -611,7 +611,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_text: "\uACF5\uACA9\uB825\uC774 1 \uAC10\uC18C\uD55C\uB2E4\n\uD22C\uC0AC\uCCB4
-    \uBC1C\uC0AC \uC2DC\n\uD22C\uC0AC\uCCB4\uB97C 1\uD68C\n\uB354 \uBC1C\uC0AC\uD55C\uB2E4"
+    \uBC1C\uC0AC \uC2DC\n\uD22C\uC0AC\uCCB4\uB97C 1\uD68C\n\uCD94\uAC00 \uBC1C\uC0AC\uD55C\uB2E4"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 87f530abab4326148b88c94965068adf, type: 2}
   m_sharedMaterial: {fileID: -4456073334522126732, guid: 87f530abab4326148b88c94965068adf, type: 2}

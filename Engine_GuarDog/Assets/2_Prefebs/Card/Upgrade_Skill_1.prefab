@@ -610,7 +610,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uAC8C\uC784\uC911 \uB2E8 \uD55C \uBC88\n\uCCB4\uB825\uC774 0%\uC77C\uB54C\n\uCCB4\uB825\uC744
+  m_text: "\uAC8C\uC784\uC911 \uB2E8 \uD55C \uBC88\n\uCCB4\uB825\uC774 0%\uC77C \uB54C\n\uCCB4\uB825\uC744
     50 \uD68C\uBCF5\uD55C\uB2E4"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 87f530abab4326148b88c94965068adf, type: 2}

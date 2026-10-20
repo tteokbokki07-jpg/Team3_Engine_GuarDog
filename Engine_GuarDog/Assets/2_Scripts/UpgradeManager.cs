@@ -197,11 +197,11 @@ public class UpgradeManager : MonoBehaviour
     }
 
     // 선택된 1-based 값을 제외 목록에 추가 (다음 뽑기에서 제외)
-    // 예외: prefabs[0] (value 1) 및 prefabs[7] (value 8)은 제외되지 않음
+    // 예외: prefabs[0] (value 1) 및 prefabs[7] (value 8) 및 prefabs[12] (value 13)은 제외되지 않음
     void ExcludeValue(int value)
     {
         // value는 1-based 번호
-        if (value == 1 || value == 8)
+        if (value == 1 || value == 8 || value == 13) //예외처리
         {
             Debug.Log($"[UpgradeManager] Value {value} is exception and will not be excluded.");
             return;
@@ -214,33 +214,7 @@ public class UpgradeManager : MonoBehaviour
         }
     }
 
-    // 각 능력 구현 (playerShot/healthItem 안전 참조)
-    //public void StatAgainUpgrade()
-    //{
-    //    if (healthItemRef == null) healthItemRef = FindObjectOfType<HealthItem>();
-    //    if (playerShotRef == null) playerShotRef = FindObjectOfType<PlayerShot>();
-
-    //    if (playerShotRef != null && playerShotRef.bulletPrefab != null)
-    //    {
-    //        var prefabBullet = playerShotRef.bulletPrefab.GetComponent<Bullet>();
-    //        if (prefabBullet != null)
-    //        {
-    //            prefabBullet.moredamage += 3;
-    //            Debug.Log("[UpgradeManager] Prefab bullet damage increased by 3.");
-    //        }
-    //    }
-
-    //    var bullets = FindObjectsOfType<Bullet>();
-    //    foreach (var b in bullets) b.moredamage += 3;
-    //    Debug.Log($"[UpgradeManager] Scene bullets damage increased by 3 (count: {bullets.Length}).");
-
-    //    if (healthItemRef != null && healthItemRef.PlayerHealth != null)
-    //    {
-    //        healthItemRef.PlayerHealth.maxHP += 25;
-    //        healthItemRef.PlayerHealth.Heal(999);
-    //    }
-    //}
-
+    
     // 선택 후 정리: 이번에 생성한 카드 인스턴스들만 파괴하고 UpgradePanel 비활성화
     void CleanupAfterSelection(string abilityName, GameObject selectedInstance)
     {

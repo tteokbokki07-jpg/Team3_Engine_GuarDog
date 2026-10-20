@@ -1,16 +1,41 @@
+using System;
 using System.Collections.Generic;
-using UnityEngine;
 using TMPro;
+using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class UpgradeUI : MonoBehaviour
+[Serializable]
+public class UpgradeTextMapping
 {
+    public int number;
+    [TextArea(2, 5)]
+    public string text;
+}
+
+public class UpgradeUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+{
+
+    public GameObject descriptionPanel;
+
     public TextMeshProUGUI upgradeText;
+
+    [Header("숫자별 표시 텍스트")]
+    public List<UpgradeTextMapping> textMappings = new List<UpgradeTextMapping>();
 
     // 누적된 선택 번호를 저장
     private readonly List<int> pickedHistory = new List<int>();
 
-    // UpgradeManager에서 전달된 숫자들을 누적하여 텍스트에 표시합니다.
-    // 이미 존재하는 숫자는 중복 추가하지 않습니다.
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        descriptionPanel.SetActive(true);
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        descriptionPanel.SetActive(false);
+    }
+
+    // UpgradeManager에서 전달된 숫자를 누적합니다.
     public void SetPickedNumbers(List<int> picked)
     {
         if (upgradeText == null)
@@ -22,10 +47,10 @@ public class UpgradeUI : MonoBehaviour
         if (picked == null || picked.Count == 0)
             return;
 
-        foreach (var p in picked)
+        foreach (int number in picked)
         {
-            if (!pickedHistory.Contains(p))
-                pickedHistory.Add(p);
+            if (!pickedHistory.Contains(number))
+                pickedHistory.Add(number);
         }
 
         UpdateText();
@@ -35,13 +60,32 @@ public class UpgradeUI : MonoBehaviour
     public void ClearPickedNumbers()
     {
         pickedHistory.Clear();
+
         if (upgradeText != null)
             upgradeText.text = "";
     }
 
     private void UpdateText()
     {
-        var strArr = pickedHistory.ConvertAll(p => p.ToString()).ToArray();
-        upgradeText.text = string.Join(", ", strArr);
+        List<string> displayTexts = new List<string>();
+
+        foreach (int number in pickedHistory)
+        {
+            UpgradeTextMapping mapping = textMappings.Find(
+                item => item.number == number
+            );
+
+            if (mapping != null && !string.IsNullOrEmpty(mapping.text))
+            {
+                displayTexts.Add(mapping.text);
+            }
+            else
+            {
+                // 매핑되지 않은 숫자는 기존 숫자를 표시
+                displayTexts.Add(number.ToString());
+            }
+        }
+
+        upgradeText.text = string.Join("\n", displayTexts);
     }
 }
