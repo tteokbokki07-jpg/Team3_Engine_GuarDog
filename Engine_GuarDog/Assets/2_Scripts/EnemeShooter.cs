@@ -24,6 +24,7 @@ public class EnemyShooter : MonoBehaviour
     Collider homeCollider;
     float lastFireTime;
     float lastAttackTime = -999f;
+    
 
     void Start()
     {

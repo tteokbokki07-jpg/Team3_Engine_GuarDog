@@ -57,6 +57,27 @@ public class UImanager : MonoBehaviour
         PausePanel.SetActive(false);
         isPaused = false;
 
+        // 커서 보이기 및 잠금 해제
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;        
+
+        if (playerController != null) playerController.SetLookEnabled(true);
+    }
+    public void GameStopNoPanel()
+    {
+        Time.timeScale = 0;
+        isPaused = true;
+
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+
+        if (playerController != null) playerController.SetLookEnabled(false);
+    }
+    public void GamePauseNoPanel()
+    {
+        Time.timeScale = 1;
+        isPaused = false;
+
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 

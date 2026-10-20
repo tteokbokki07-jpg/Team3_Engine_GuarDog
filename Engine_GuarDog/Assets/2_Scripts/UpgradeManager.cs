@@ -231,5 +231,16 @@ public class UpgradeManager : MonoBehaviour
         // 2) UpgradePanel 객체 비활성화 (우선 UpgradePanel, 없으면 parentCanvas)
         if (UpgradePanel != null) UpgradePanel.SetActive(false);
         else if (parentCanvas != null) parentCanvas.SetActive(false);
+
+        // uimanager의 GamePause() 호출하여 게임 재개
+        var uiManager = FindObjectOfType<UImanager>();
+        if (uiManager != null)
+        {
+            uiManager.GamePauseNoPanel();
+        }
+        else
+        {
+            Debug.LogWarning("[UpgradeManager] UImanager not found. Cannot resume game.");
+        }
     }
 }

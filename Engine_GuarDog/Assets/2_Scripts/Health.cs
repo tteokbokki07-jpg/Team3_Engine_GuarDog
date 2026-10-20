@@ -41,6 +41,8 @@ public class Health : MonoBehaviour
         UpdateBar();
         UpdateHPText();
 
+
+
         if (currentHP <= 0) Die();
     }
 
