@@ -19,6 +19,8 @@ public class UpgradeManager : MonoBehaviour
     public Transform spawnPoint1; // 생성 위치를 지정할 Transform
     public Transform spawnPoint2; // 생성 위치를 지정할 Transform
     public Transform spawnPoint3; // 생성 위치를 지정할 Transform
+    public Health playerhealth;
+    public Button rerollButton;
     [Header("프리팹 리스트 (인스펙터 할당)")]
     public UpgradeData[] upgradeData;
 
@@ -43,12 +45,30 @@ public class UpgradeManager : MonoBehaviour
 
         if (upgradeUI == null)
             upgradeUI = FindObjectOfType<UpgradeUI>();
+        playerhealth = FindObjectOfType<Health>();
+    }
+    void Update()
+    {
+        rerollButton.interactable = playerhealth.currentHP > 50f;
+    }
+
+    public void RerollRisk()
+    {
+        playerhealth.TakeDamage(50);
+        UpgradeNumbers();
     }
 
     // 인스펙터 우클릭(또는 컴포넌트 메뉴)에서 실행 가능
     [ContextMenu("Pick Three Unique Numbers And Spawn")]
     public void UpgradeNumbers()
     {
+        foreach (var go in spawnedCards)
+        {
+            if (go != null) Destroy(go);
+        }
+        spawnedCards.Clear();
+        spawnedCardToPrefabIndex.Clear();
+
         if (UpgradePanel != null)
             UpgradePanel.SetActive(true);
 
