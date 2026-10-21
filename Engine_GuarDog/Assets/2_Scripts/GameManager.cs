@@ -9,7 +9,7 @@ public class GameManager : MonoBehaviour
     public Light directionalLight;
     public float transitionSpeed = 1f;
     public bool isDefence = true;
-    public float Wave = 0;
+    public float Wave = 1;
     public UpgradeManager upgradeManager;
     [Header("게임 적 관리 설정")]
     public float EnemyCount = 0f; // 현재 씬에 존재하는 적의 수
@@ -81,7 +81,9 @@ public class GameManager : MonoBehaviour
             titleText.color = new Color(0.6f, 1f, 0.7f); // 녹색
             ShowTitleText();
             isDefence = false;
+            Wave++;
             Invoke(nameof(CallUpgrade), 4f);
+            Invoke(nameof(CallNextWave), 6f);
         }
 
         // isDefence 값에 따라 낮/밤 결정
@@ -117,6 +119,12 @@ public class GameManager : MonoBehaviour
     {
         uimanager.GameStopNoPanel();
         upgradeManager.UpgradeNumbers();
+    }
+    private void CallNextWave()
+    {
+        titleText.text = "집을 지켜내라\n" + Wave.ToString() + "번째 밤";
+        titleText.color = new Color(1, 1, 0); // 노란색
+        ShowTitleText();
     }
 
     // 낮/밤 전환 요청 (서서히 보간될 타깃 값만 변경)
