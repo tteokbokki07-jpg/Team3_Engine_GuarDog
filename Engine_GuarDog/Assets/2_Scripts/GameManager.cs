@@ -4,27 +4,30 @@ using TMPro;
 
 public class GameManager : MonoBehaviour
 {
-    //public static GameManager Instance; // 싱글톤 인스턴스
     [Header("낮밤 설정")]
     public Light directionalLight;
     public float transitionSpeed = 1f;
     public bool isDefence = true;
     public float Wave = 1;
     public UpgradeManager upgradeManager;
-    [Header("게임 적 관리 설정")]
+    [Header("게임 설정")]
+    public PlayerController playerController;
     public float EnemyCount = 0f; // 현재 씬에 존재하는 적의 수
     public float EnemySpawnerCount = 0f; // 현재 씬에 존재하는 적 스포너의 수
     public int KillCount = 0; // 플레이어가 처치한 적의 수
     public UImanager uimanager;
-    [Header("게임 설정")]
+    [Header("웨이브별 스포너 설정")]
+    public List<GameObject> spawnerList = new List<GameObject>();
+    public Transform spawnerSpawnPoint;
+
     // 타이틀 텍스트 페이드아웃 코루틴 참조
     private Coroutine titleFadeRoutine;
 
     [Header("타이틀 텍스트 설정")]
     public TextMeshProUGUI titleText;
-    public float titleDisplayDuration = 3f;
-    public float titleFadeInDuration = 1f;
-    public float titleFadeOutDuration = 1f;
+    float titleDisplayDuration = 3f;
+    float titleFadeInDuration = 0.5f;
+    float titleFadeOutDuration = 0.5f;
 
 
     // 내부 상태
@@ -36,14 +39,9 @@ public class GameManager : MonoBehaviour
     // 낮 전환 후 GameClear 호출 코루틴 참조
     private Coroutine dayClearRoutine;
 
-    void Awake()
-    {
-        //Instance = this;
-    }
-
     void Start()
     {
-        titleText.text = "집을 지켜내라\n" + Wave.ToString() + "번째 밤";
+        titleText.text = Wave.ToString() + "번째 밤";
         titleText.color = new Color(1, 1, 0); // 노란색
         ShowTitleText();
 
@@ -61,6 +59,7 @@ public class GameManager : MonoBehaviour
         isDay = !isDefence;
         lastIsDay = !isDay;
         ApplyDayNightImmediate(isDay);
+        SpawnSpawnerByWave();
     }
 
     void Update()
@@ -77,7 +76,8 @@ public class GameManager : MonoBehaviour
         // 적과 적 스포너가 모두 없으면 낮으로 전환
         if (EnemyCount <= 0 && EnemySpawnerCount <= 0 && isDefence)
         {
-            titleText.text = "밤동안 무사히\n집을 지켜냈다!";
+            uimanager.isGaming = false;
+            titleText.text = "무사히 밤을 보냈다!";
             titleText.color = new Color(0.6f, 1f, 0.7f); // 녹색
             ShowTitleText();
             isDefence = false;
@@ -122,9 +122,85 @@ public class GameManager : MonoBehaviour
     }
     private void CallNextWave()
     {
-        titleText.text = "집을 지켜내라\n" + Wave.ToString() + "번째 밤";
+        uimanager.isGaming = true;
+        SpawnSpawnerByWave(); //스포너 생성
+        isDefence = true;
+        titleText.text = Wave.ToString() + "번째 밤";
         titleText.color = new Color(1, 1, 0); // 노란색
         ShowTitleText();
+    }
+    public void CallGameOverText()
+    {
+        uimanager.isGaming = false;
+        titleText.text = "집을 지켜내지 못했습니다...";
+        titleText.color = new Color(1, 0, 0); // 빨간색
+        ShowTitleText();
+
+        // 조작 비활성화
+        if (playerController != null)
+        {
+            playerController.SetInputEnabled(false);
+        }
+        Invoke(nameof(CallGameOver), 4f);
+    }
+    private void CallGameOver()
+    {
+        if (uimanager != null)
+        {
+            uimanager.GameOver();
+        }
+        else
+        {
+            Debug.LogWarning("[GameManager] UImanager가 연결되지 않았습니다.");
+        }
+    }
+
+    public void SpawnSpawnerByWave()
+    {
+        if (spawnerList == null || spawnerList.Count == 0)
+        {
+            Debug.LogWarning("[GameManager] spawnerList가 비어 있습니다.");
+            return;
+        }
+
+        // Wave 1 -> 리스트 0번
+        int spawnerIndex = Mathf.RoundToInt(Wave) - 1;
+
+        if (spawnerIndex < 0 || spawnerIndex >= spawnerList.Count)
+        {
+            Debug.LogWarning(
+                $"[GameManager] Wave {Wave}에 해당하는 스포너가 없습니다."
+            );
+            return;
+        }
+
+        GameObject spawnerPrefab = spawnerList[spawnerIndex];
+
+        if (spawnerPrefab == null)
+        {
+            Debug.LogWarning(
+                $"[GameManager] spawnerList[{spawnerIndex}]가 비어 있습니다."
+            );
+            return;
+        }
+
+        Vector3 spawnPosition = spawnerSpawnPoint != null
+            ? spawnerSpawnPoint.position
+            : transform.position;
+
+        Quaternion spawnRotation = spawnerSpawnPoint != null
+            ? spawnerSpawnPoint.rotation
+            : Quaternion.identity;
+
+        Instantiate(
+            spawnerPrefab,
+            spawnPosition,
+            spawnRotation
+        );
+
+        Debug.Log(
+            $"[GameManager] {Wave}번째 웨이브 스포너 생성: {spawnerPrefab.name}"
+        );
     }
 
     // 낮/밤 전환 요청 (서서히 보간될 타깃 값만 변경)

@@ -14,6 +14,13 @@ public class Health : MonoBehaviour
 
     void Start()
     {
+        // 인스펙터에 할당되지 않았을 때 자동으로 찾기
+        if (gameManager == null)
+            gameManager = FindObjectOfType<GameManager>();
+
+        if (healthItem == null)
+            healthItem = FindObjectOfType<HealthItem>();
+
         currentHP = maxHP;
         UpdateBar();
         UpdateHPText();
@@ -70,12 +77,10 @@ public class Health : MonoBehaviour
     {
         if (CompareTag("Player"))
         {
-            var healthItem = FindObjectOfType<HealthItem>();
             if (healthItem.canRevive == false)
             {
                 Debug.Log("Game Over");
-                var uiManager = FindObjectOfType<UImanager>();
-                uiManager.GameOver();
+                gameManager.CallGameOverText();
 
             }
             else if (healthItem.canRevive == true)
@@ -88,8 +93,7 @@ public class Health : MonoBehaviour
         else if (CompareTag("Home"))
         {
             Debug.Log("Game Over");
-            var uiManager = FindObjectOfType<UImanager>();
-            uiManager.GameOver();
+            gameManager.CallGameOverText();
         }
         else
         {
