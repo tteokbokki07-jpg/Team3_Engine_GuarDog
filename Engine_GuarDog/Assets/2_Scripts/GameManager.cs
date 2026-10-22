@@ -41,6 +41,7 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        TitleTextNormal();
         titleText.text = Wave.ToString() + "번째 밤";
         titleText.color = new Color(1, 1, 0); // 노란색
         ShowTitleText();
@@ -76,6 +77,7 @@ public class GameManager : MonoBehaviour
         // 적과 적 스포너가 모두 없으면 낮으로 전환
         if (EnemyCount <= 0 && EnemySpawnerCount <= 0 && isDefence)
         {
+            TitleTextNormal();
             uimanager.isGaming = false;
             titleText.text = "무사히 밤을 보냈다!";
             titleText.color = new Color(0.6f, 1f, 0.7f); // 녹색
@@ -114,6 +116,25 @@ public class GameManager : MonoBehaviour
             );
         }
     }
+    public void TitleTextNormal()
+    {
+        titleDisplayDuration = 3f;
+        titleFadeInDuration = 0.5f;
+        titleFadeOutDuration = 0.5f;
+    }
+    public void TitleTextFast()
+    {
+        titleDisplayDuration = 1f;
+        titleFadeInDuration = 0.2f;
+        titleFadeOutDuration = 0.2f;
+    }
+    public void CallHomeText()
+    {
+        TitleTextFast();
+        titleText.text = "집이 공격받고 있습니다!";
+        titleText.color = new Color(1, 0, 0); // 빨간색
+        ShowTitleText();
+    }
 
     private void CallUpgrade() //강화 부르기
     {
@@ -122,6 +143,7 @@ public class GameManager : MonoBehaviour
     }
     private void CallNextWave()
     {
+        TitleTextNormal();
         uimanager.isGaming = true;
         SpawnSpawnerByWave(); //스포너 생성
         isDefence = true;
@@ -131,6 +153,7 @@ public class GameManager : MonoBehaviour
     }
     public void CallGameOverText()
     {
+        TitleTextNormal();
         uimanager.isGaming = false;
         titleText.text = "집을 지켜내지 못했습니다...";
         titleText.color = new Color(1, 0, 0); // 빨간색

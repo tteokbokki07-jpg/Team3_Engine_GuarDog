@@ -30,6 +30,8 @@ public class PlayerController : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         SetInputEnabled(true);
+        allowInput = true;
+        allowLook = true;
     }
     public void SetInputEnabled(bool enabled)
     {

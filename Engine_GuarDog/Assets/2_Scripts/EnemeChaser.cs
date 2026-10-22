@@ -134,7 +134,7 @@ public class EnemeChaser : MonoBehaviour
             {
                 lastAttackTime = Time.time;
                 var hp = home.GetComponent<Health>();
-                if (hp != null) hp.TakeDamage(damage * 2); // 집은 2배 피해
+                if (hp != null) hp.TakeDamage(damage + 5); // 집은 5 추가데미지
                 Debug.Log("집공격");
             }
         }

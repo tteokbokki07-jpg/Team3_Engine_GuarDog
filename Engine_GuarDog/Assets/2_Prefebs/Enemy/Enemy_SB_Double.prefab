@@ -261,7 +261,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyShooter
   bulletPrefab: {fileID: 2205163610957453508, guid: 40e166993cb146847b7ee288e83431f7, type: 3}
   firePoint: {fileID: 7162113549548059331}
-  moveSpeed: 2
+  moveSpeed: 3
   detectRange: 25
   keepDistance: 15
   fireRange: 15
@@ -290,6 +290,7 @@ MonoBehaviour:
   isMaxHP: 1
   gameManager: {fileID: 0}
   healthItem: {fileID: 0}
+  hitEffect: {fileID: 3528138791037262641, guid: c85f0acbb5b9505408d75d18d3d81ae8, type: 3}
 --- !u!54 &3178119208013632098
 Rigidbody:
   m_ObjectHideFlags: 0

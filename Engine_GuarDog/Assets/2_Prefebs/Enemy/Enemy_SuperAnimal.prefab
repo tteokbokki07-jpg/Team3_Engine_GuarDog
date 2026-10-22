@@ -314,6 +314,7 @@ MonoBehaviour:
   isMaxHP: 1
   gameManager: {fileID: 0}
   healthItem: {fileID: 0}
+  hitEffect: {fileID: 3528138791037262641, guid: c85f0acbb5b9505408d75d18d3d81ae8, type: 3}
 --- !u!54 &3178119208013632098
 Rigidbody:
   m_ObjectHideFlags: 0

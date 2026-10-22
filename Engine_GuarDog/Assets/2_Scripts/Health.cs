@@ -11,6 +11,7 @@ public class Health : MonoBehaviour
     public bool isMaxHP = true;
     public GameManager gameManager;
     public HealthItem healthItem; // HealthItem 참조
+    public GameObject hitEffect;
 
     void Start()
     {
@@ -24,6 +25,10 @@ public class Health : MonoBehaviour
         currentHP = maxHP;
         UpdateBar();
         UpdateHPText();
+        Vector3 hitPos = transform.position + Vector3.up;
+        if (hitEffect != null)
+            Instantiate(hitEffect, hitPos, Quaternion.identity);
+
     }
 
     void Update()
@@ -47,8 +52,15 @@ public class Health : MonoBehaviour
         Debug.Log(name + " HP: " + currentHP + " / " + maxHP + " 받은피해: " + damage);
         UpdateBar();
         UpdateHPText();
+        Vector3 hitPos = transform.position + Vector3.up;
+        if (hitEffect != null)
+            Instantiate(hitEffect, hitPos, Quaternion.identity);
 
-
+        if (CompareTag("Home"))
+        {
+            Debug.Log("집 공격받는중");
+            gameManager.CallHomeText();
+        }
 
         if (currentHP <= 0) Die();
     }

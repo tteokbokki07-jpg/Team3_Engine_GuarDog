@@ -10173,6 +10173,7 @@ MonoBehaviour:
   isMaxHP: 1
   gameManager: {fileID: 1642463304}
   healthItem: {fileID: 602736477}
+  hitEffect: {fileID: 1523074419914903500, guid: 445c40cbb9dc1b949a0fd352c242874b, type: 3}
 --- !u!114 &602736477
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -33144,6 +33145,7 @@ MonoBehaviour:
   isMaxHP: 1
   gameManager: {fileID: 0}
   healthItem: {fileID: 0}
+  hitEffect: {fileID: 4138166596665236890, guid: b8c64296f3fed3d4d81f6695c100350c, type: 3}
 --- !u!65 &1920920464
 BoxCollider:
   m_ObjectHideFlags: 0

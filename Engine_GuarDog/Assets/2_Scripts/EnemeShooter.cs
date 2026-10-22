@@ -180,7 +180,7 @@ public class EnemyShooter : MonoBehaviour
             if (b != null)
             {
                 b.targetTag = targetTag;
-                b.damage = (targetTag == "Home") ? baseDamage * 2 : baseDamage;
+                b.damage = (targetTag == "Home") ? baseDamage + 5 : baseDamage;
                 b.ownerTag = string.IsNullOrEmpty(gameObject.tag) ? "Enemy" : gameObject.tag;
                 // 멀티샷/더블샷 변종에 따라 추가 설정(예: 큰 총알) 처리 가능
                 if (isBigType)

@@ -9,6 +9,7 @@ public class EnemySpawner : MonoBehaviour
 
     public float timer;
     public float spawnInterval = 3f; //소환주기
+    public int oneSpawnCount = 1; //한 번에 소환할 적 수
     public int totalSpawn = 10; //총 소환값
     public int currentSpawn = 0; //현재 소환값
 
@@ -40,18 +41,22 @@ public class EnemySpawner : MonoBehaviour
             return;
         }
 
-        int enemyIndex = Random.Range(0, enemyPrefabs.Length);
-        int positionIndex = Random.Range(0, spawnPositions.Length);
+        int spawnCount = Mathf.Min(oneSpawnCount, totalSpawn - currentSpawn);
+        for (int i = 0; i < spawnCount; i++)
+        {
+            int enemyIndex = Random.Range(0, enemyPrefabs.Length);
+            int positionIndex = Random.Range(0, spawnPositions.Length);
 
-        Vector3 spawnPosition = spawnPositions[positionIndex];
+            Vector3 spawnPosition = spawnPositions[positionIndex];
 
-        Instantiate(
-            enemyPrefabs[enemyIndex],
-            spawnPosition,
-            Quaternion.identity
-        );
+            Instantiate(
+                enemyPrefabs[enemyIndex],
+                spawnPosition,
+                Quaternion.identity
+            );
 
-        currentSpawn++;
+            currentSpawn++;
+        }
 
         if (currentSpawn >= totalSpawn)
         {

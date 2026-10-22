@@ -256,7 +256,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f76009092a528d546bf0f45b027ff55b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemeChaser
-  moveSpeed: 4.25
+  moveSpeed: 5
   detectRange: 20
   attackRange: 2
   damage: 5
@@ -281,6 +281,7 @@ MonoBehaviour:
   isMaxHP: 1
   gameManager: {fileID: 0}
   healthItem: {fileID: 0}
+  hitEffect: {fileID: 3528138791037262641, guid: c85f0acbb5b9505408d75d18d3d81ae8, type: 3}
 --- !u!54 &3178119208013632098
 Rigidbody:
   m_ObjectHideFlags: 0
