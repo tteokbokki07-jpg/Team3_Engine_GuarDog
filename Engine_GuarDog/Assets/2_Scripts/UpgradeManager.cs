@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
+using TMPro;
 
 [System.Serializable]
 public class UpgradeData
@@ -13,7 +14,6 @@ public class UpgradeData
 
 public class UpgradeManager : MonoBehaviour
 {
-    [Header("생성 시 부모로 사용할 캔버스(또는 다른 Transform)를 할당")]
     public GameObject parentCanvas;
     public GameObject UpgradePanel; // UpgradePanel을 인스펙터에서 할당
     public Transform spawnPoint1; // 생성 위치를 지정할 Transform
@@ -21,11 +21,12 @@ public class UpgradeManager : MonoBehaviour
     public Transform spawnPoint3; // 생성 위치를 지정할 Transform
     public Health playerhealth;
     public Button rerollButton;
+    public UpgradeUI upgradeUI;
+    public GameManager gameManager;
+    public TextMeshProUGUI BonusUpg;
     [Header("프리팹 리스트 (인스펙터 할당)")]
     public UpgradeData[] upgradeData;
 
-    // Upgrade UI 참조 (인스펙터 할당 가능, 없으면 Awake에서 Find)
-    public UpgradeUI upgradeUI;
 
     private PlayerShot playerShotRef;
     private HealthItem healthItemRef;
@@ -46,10 +47,12 @@ public class UpgradeManager : MonoBehaviour
         if (upgradeUI == null)
             upgradeUI = FindObjectOfType<UpgradeUI>();
         playerhealth = FindObjectOfType<Health>();
+        gameManager = FindObjectOfType<GameManager>();
     }
     void Update()
     {
         rerollButton.interactable = playerhealth.currentHP > 50f;
+        BonusUpg.text = $"{gameManager.BonusUpg}";
     }
 
     public void RerollRisk()
@@ -252,15 +255,19 @@ public class UpgradeManager : MonoBehaviour
         if (UpgradePanel != null) UpgradePanel.SetActive(false);
         else if (parentCanvas != null) parentCanvas.SetActive(false);
 
-        // uimanager의 GamePause() 호출하여 게임 재개
-        var uiManager = FindObjectOfType<UImanager>();
-        if (uiManager != null)
+        if (gameManager.BonusUpg > 0)
         {
-            uiManager.GamePauseNoPanel();
+            UpgradeNumbers();
+            Debug.Log("보너스뽑기");
+            gameManager.BonusUpg--;
         }
         else
         {
-            Debug.LogWarning("[UpgradeManager] UImanager not found. Cannot resume game.");
+            // uimanager의 GamePause() 호출하여 게임 재개
+            var uiManager = FindObjectOfType<UImanager>();
+            uiManager.GamePauseNoPanel();
         }
+
+        
     }
 }

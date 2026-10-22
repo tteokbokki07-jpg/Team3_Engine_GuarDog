@@ -106,7 +106,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e247bcc5574940f43af5c4457665c2df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Bullet
-  damage: 15
+  damage: 10
   moredamage: 0
   lifeTime: 2
   targetTag: Player

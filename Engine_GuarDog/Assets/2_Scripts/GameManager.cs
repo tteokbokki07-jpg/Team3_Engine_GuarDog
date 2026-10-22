@@ -15,10 +15,14 @@ public class GameManager : MonoBehaviour
     public float EnemyCount = 0f; // 현재 씬에 존재하는 적의 수
     public float EnemySpawnerCount = 0f; // 현재 씬에 존재하는 적 스포너의 수
     public int KillCount = 0; // 플레이어가 처치한 적의 수
+    public int MissionKillCount = 0; // 플레이어가 처치한 적의 수(미션)
+    public int MissionCount = 11;
+    public int BonusUpg = 0;
     public UImanager uimanager;
     [Header("웨이브별 스포너 설정")]
     public List<GameObject> spawnerList = new List<GameObject>();
     public Transform spawnerSpawnPoint;
+    public TextMeshProUGUI dayText;
 
     // 타이틀 텍스트 페이드아웃 코루틴 참조
     private Coroutine titleFadeRoutine;
@@ -41,10 +45,12 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        //MissionCount = 11; //최종테스트 이후 주석해제
         TitleTextNormal();
         titleText.text = Wave.ToString() + "번째 밤";
         titleText.color = new Color(1, 1, 0); // 노란색
         ShowTitleText();
+        dayText.text = "Day " + Wave.ToString();
 
         // 초기 적 수 계산
         EnemyCount = GameObject.FindGameObjectsWithTag("Enemy").Length;
@@ -115,6 +121,14 @@ public class GameManager : MonoBehaviour
                 Time.deltaTime * transitionSpeed
             );
         }
+
+        if (MissionKillCount >= MissionCount)
+        {
+            Debug.Log("MissionComplete");
+            MissionKillCount -= MissionCount;
+            BonusUpg ++;
+            MissionCount = (int)(MissionCount * 1.4f);
+        }
     }
     public void TitleTextNormal()
     {
@@ -150,6 +164,9 @@ public class GameManager : MonoBehaviour
         titleText.text = Wave.ToString() + "번째 밤";
         titleText.color = new Color(1, 1, 0); // 노란색
         ShowTitleText();
+        dayText.text = "Day " + Wave.ToString();
+
+        
     }
     public void CallGameOverText()
     {

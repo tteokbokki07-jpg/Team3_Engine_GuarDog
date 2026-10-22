@@ -261,7 +261,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyShooter
   bulletPrefab: {fileID: 2205163610957453508, guid: 40e166993cb146847b7ee288e83431f7, type: 3}
   firePoint: {fileID: 7162113549548059331}
-  moveSpeed: 3
+  moveSpeed: 2.25
   detectRange: 25
   keepDistance: 15
   fireRange: 15
@@ -283,8 +283,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac4089395f56b674280d3cd8fca27336, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Health
-  maxHP: 225
-  currentHP: 225
+  maxHP: 180
+  currentHP: 180
   hpSlider: {fileID: 5031110459465914936}
   HPText: {fileID: 0}
   isMaxHP: 1

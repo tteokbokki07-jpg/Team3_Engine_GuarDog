@@ -282,8 +282,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac4089395f56b674280d3cd8fca27336, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Health
-  maxHP: 250
-  currentHP: 250
+  maxHP: 220
+  currentHP: 220
   hpSlider: {fileID: 5031110459465914936}
   HPText: {fileID: 0}
   isMaxHP: 1

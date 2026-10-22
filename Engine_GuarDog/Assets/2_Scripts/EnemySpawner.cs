@@ -23,21 +23,15 @@ public class EnemySpawner : MonoBehaviour
         timer = 0f;
 
         // 더 이상 소환할 적이 없다면 스포너 제거
-        if (currentSpawn >= totalSpawn)
+        if (currentSpawn >= totalSpawn || timer >= 1)
         {
             Destroy(gameObject);
             return;
         }
 
-        if (enemyPrefabs == null || enemyPrefabs.Length == 0)
+        if (enemyPrefabs == null || spawnPositions == null || enemyPrefabs.Length == 0)
         {
-            Debug.LogWarning("[EnemySpawner] enemyPrefabs가 비어 있습니다.");
-            return;
-        }
-
-        if (spawnPositions == null || spawnPositions.Length == 0)
-        {
-            Debug.LogWarning("[EnemySpawner] spawnPositions가 비어 있습니다.");
+            Debug.LogWarning("[EnemySpawner] enemyPrefabs or spawnPositions가 비어 있습니다.");
             return;
         }
 
@@ -60,7 +54,7 @@ public class EnemySpawner : MonoBehaviour
 
         if (currentSpawn >= totalSpawn)
         {
-            Destroy(gameObject);
+            Destroy(gameObject, 1f);
         }
     }
 }

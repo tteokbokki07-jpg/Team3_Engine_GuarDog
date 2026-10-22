@@ -257,7 +257,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemeChaser
   moveSpeed: 4.75
-  detectRange: 20
+  detectRange: 22.5
   attackRange: 2
   damage: 15
   attackCooldown: 3

@@ -96,8 +96,9 @@ MonoBehaviour:
   - {x: 40, y: 1.5, z: -40}
   - {x: 0, y: 1.5, z: -50}
   - {x: -40, y: 1.5, z: -40}
-  timer: 0
-  spawnInterval: 6
+  timer: 10
+  spawnInterval: 13
+  oneSpawnCount: 3
   totalSpawn: 15
   currentSpawn: 0
 --- !u!1 &1793406291159094923

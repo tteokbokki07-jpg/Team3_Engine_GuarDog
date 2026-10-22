@@ -114,6 +114,7 @@ public class Health : MonoBehaviour
             if (gameManager == null)
                 gameManager = FindObjectOfType<GameManager>();
             gameManager.KillCount++;
+            gameManager.MissionKillCount++;
         }
     }
 
