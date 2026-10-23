@@ -85,10 +85,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawner
   enemyPrefabs:
   - {fileID: 5279847061543763779, guid: 4f910c4943c931b49b953f9620b8d52d, type: 3}
+  - {fileID: 5279847061543763779, guid: 4f910c4943c931b49b953f9620b8d52d, type: 3}
   - {fileID: 5279847061543763779, guid: 8999d17564b17cf409c8331271648913, type: 3}
   - {fileID: 5279847061543763779, guid: e34ec8db4d052fd449c3d0de6f9bc68b, type: 3}
   - {fileID: 5279847061543763779, guid: f96c26f4c1340a44395049c4cbfee4d8, type: 3}
-  - {fileID: 5279847061543763779, guid: 4f910c4943c931b49b953f9620b8d52d, type: 3}
   spawnPositions:
   - {x: 50, y: 1.5, z: 0}
   - {x: 40, y: 1.5, z: 40}
@@ -100,7 +100,7 @@ MonoBehaviour:
   - {x: -40, y: 1.5, z: -40}
   timer: 8
   spawnInterval: 11
-  oneSpawnCount: 2
+  oneSpawnCount: 4
   totalSpawn: 20
   currentSpawn: 0
 --- !u!1 &1793406291159094923

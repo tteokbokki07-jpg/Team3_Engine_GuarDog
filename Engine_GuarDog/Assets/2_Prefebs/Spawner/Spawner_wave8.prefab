@@ -100,10 +100,10 @@ MonoBehaviour:
   - {x: 40, y: 1.5, z: -40}
   - {x: 0, y: 1.5, z: -50}
   - {x: -40, y: 1.5, z: -40}
-  timer: 12
-  spawnInterval: 15
+  timer: 9
+  spawnInterval: 12
   oneSpawnCount: 6
-  totalSpawn: 65
+  totalSpawn: 66
   currentSpawn: 0
 --- !u!1 &1793406291159094923
 GameObject:

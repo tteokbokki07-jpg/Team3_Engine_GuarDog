@@ -85,6 +85,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawner
   enemyPrefabs:
   - {fileID: 5279847061543763779, guid: 4f910c4943c931b49b953f9620b8d52d, type: 3}
+  - {fileID: 5279847061543763779, guid: 8999d17564b17cf409c8331271648913, type: 3}
   spawnPositions:
   - {x: 50, y: 1.5, z: 0}
   - {x: 40, y: 1.5, z: 40}
@@ -97,7 +98,7 @@ MonoBehaviour:
   timer: 0
   spawnInterval: 1
   oneSpawnCount: 1
-  totalSpawn: 100
+  totalSpawn: 200
   currentSpawn: 0
 --- !u!1 &1793406291159094923
 GameObject:

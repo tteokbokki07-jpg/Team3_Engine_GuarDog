@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
 using TMPro;
+using System.Collections;
 
 [System.Serializable]
 public class UpgradeData
@@ -14,6 +15,7 @@ public class UpgradeData
 
 public class UpgradeManager : MonoBehaviour
 {
+    public TextMeshProUGUI upgText;
     public GameObject parentCanvas;
     public GameObject UpgradePanel; // UpgradePanel을 인스펙터에서 할당
     public Transform spawnPoint1; // 생성 위치를 지정할 Transform
@@ -26,6 +28,8 @@ public class UpgradeManager : MonoBehaviour
     public TextMeshProUGUI BonusUpg;
     [Header("프리팹 리스트 (인스펙터 할당)")]
     public UpgradeData[] upgradeData;
+    [Header("카드 등장 애니메이션")]
+    public float scaleUpDuration = 0.3f; // 커지는 데 걸리는 시간
 
 
     private PlayerShot playerShotRef;
@@ -41,6 +45,8 @@ public class UpgradeManager : MonoBehaviour
 
     void Awake()
     {
+        upgText.text = "(원하는 능력을 하나 선택하세요!)\n강해지기 위한 고민중...";
+
         playerShotRef = FindObjectOfType<PlayerShot>();
         healthItemRef = FindObjectOfType<HealthItem>();
 
@@ -174,6 +180,12 @@ public class UpgradeManager : MonoBehaviour
                 ? Instantiate(prefab, spawnPoint.position, spawnPoint.rotation, parent)
                 : Instantiate(prefab, spawnPoint.position, spawnPoint.rotation);
 
+            // Scale을 0으로 초기화
+            instance.transform.localScale = Vector3.zero;
+
+            // Scale이 1까지 커지는 애니메이션 실행
+            StartCoroutine(ScaleUp(instance.transform));
+
             spawnedCards.Add(instance);
             spawnedCardToPrefabIndex[instance] = prefabIndex;
 
@@ -187,16 +199,33 @@ public class UpgradeManager : MonoBehaviour
                 // 클릭 시: 선택 이벤트 실행, UI에 '선택된 카드 인덱스(1-based)' 전달, 제외 처리, 창 닫기
                 btn.onClick.AddListener(() =>
                 {
+                    // 중복 클릭 방지
+                    foreach (GameObject card in spawnedCards)
+                    {
+                        if (card == null)
+                            continue;
+
+                        Button cardButton = card.GetComponentInChildren<Button>();
+
+                        if (cardButton != null)
+                            cardButton.interactable = false;
+                    }
+
+                    // 선택한 카드의 효과 적용
                     selectedData.onSelect?.Invoke();
 
-                    // UpgradeUI로 전달: 선택한 카드의 인덱스 번호(1-based)
+                    // 선택한 카드 번호 전달
                     upgradeUI?.SetPickedNumbers(new List<int> { index + 1 });
 
+                    // 선택한 카드 제외 처리
                     ExcludeValue(index + 1);
 
-                    CleanupAfterSelection(
-                        selectedData.prefabs.name,
-                        instance
+                    // 선택하지 않은 카드 2개 사라지는 애니메이션 실행
+                    StartCoroutine(
+                        DisappearUnselectedCards(
+                            instance,
+                            selectedData.prefabs.name
+                        )
                     );
                 });
             }
@@ -270,4 +299,91 @@ public class UpgradeManager : MonoBehaviour
 
         
     }
+
+    IEnumerator ScaleUp(Transform cardTransform) // 카드가 커지면서 등장하는 애니메이션
+    {
+        float elapsed = 0f;
+
+        Vector3 startScale = Vector3.zero;
+        Vector3 targetScale = Vector3.one;
+
+        cardTransform.localScale = startScale;
+
+        while (elapsed < scaleUpDuration)
+        {
+            elapsed += Time.unscaledDeltaTime;
+
+            float progress = Mathf.Clamp01(elapsed / scaleUpDuration);
+
+            // 부드럽게 커지는 효과
+            progress = Mathf.SmoothStep(0f, 1f, progress);
+
+            cardTransform.localScale = Vector3.Lerp(
+                startScale,
+                targetScale,
+                progress
+            );
+
+            yield return null;
+        }
+
+        // 마지막 Scale을 정확하게 1로 설정
+        cardTransform.localScale = targetScale;
+    }
+    
+    IEnumerator ScaleDown(Transform cardTransform) // 선택하지 않은 카드가 작아지면서 사라지는 애니메이션
+    {
+        float elapsed = 0f;
+        float duration = 0.2f;
+
+        Vector3 startScale = cardTransform.localScale;
+        Vector3 targetScale = Vector3.zero;
+
+        while (elapsed < duration)
+        {
+            if (cardTransform == null)
+                yield break;
+
+            elapsed += Time.unscaledDeltaTime;
+
+            float progress = Mathf.Clamp01(elapsed / duration);
+            progress = Mathf.SmoothStep(0f, 1f, progress);
+
+            cardTransform.localScale = Vector3.Lerp(
+                startScale,
+                targetScale,
+                progress
+            );
+
+            yield return null;
+        }
+
+        if (cardTransform != null)
+            cardTransform.localScale = Vector3.zero;
+    }
+
+    IEnumerator DisappearUnselectedCards(
+        GameObject selectedInstance,
+        string abilityName) // 선택한 카드를 제외한 나머지 카드 제거 애니메이션
+    {
+        List<Coroutine> animations = new List<Coroutine>();
+
+        foreach (GameObject card in spawnedCards)
+        {
+            // 선택한 카드는 제외
+            if (card == null || card == selectedInstance)
+                continue;
+
+            animations.Add(
+                StartCoroutine(ScaleDown(card.transform))
+            );
+        }
+
+        // 모든 카드의 축소 애니메이션이 끝날 때까지 대기
+        yield return new WaitForSecondsRealtime(0.2f);
+
+        // 기존 카드 선택 후 정리 로직 실행
+        CleanupAfterSelection(abilityName, selectedInstance);
+    }
+
 }

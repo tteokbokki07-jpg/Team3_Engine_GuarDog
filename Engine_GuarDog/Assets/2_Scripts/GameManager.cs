@@ -83,15 +83,29 @@ public class GameManager : MonoBehaviour
         // 적과 적 스포너가 모두 없으면 낮으로 전환
         if (EnemyCount <= 0 && EnemySpawnerCount <= 0 && isDefence)
         {
-            TitleTextNormal();
-            uimanager.isGaming = false;
-            titleText.text = "무사히 밤을 보냈다!";
-            titleText.color = new Color(0.6f, 1f, 0.7f); // 녹색
-            ShowTitleText();
-            isDefence = false;
-            Wave++;
-            Invoke(nameof(CallUpgrade), 4f);
-            Invoke(nameof(CallNextWave), 6f);
+            if (Wave != 10)
+            {
+                TitleTextNormal();
+                uimanager.isGaming = false;
+                titleText.text = "무사히 밤을 보냈다!";
+                titleText.color = new Color(0.6f, 1f, 0.7f); // 녹색
+                ShowTitleText();
+                isDefence = false;
+                Wave++;
+                Invoke(nameof(CallUpgrade), 4f);
+                Invoke(nameof(CallNextWave), 6f);
+            }
+            else
+            {
+                TitleTextSlow();
+                uimanager.isGaming = false;
+                titleText.text = "마지막 밤을 무사히 보냈다!";
+                titleText.color = new Color(0.6f, 1f, 0.7f); // 녹색
+                ShowTitleText();
+                isDefence = false;
+                //CallGameClearAfterDelay(4f);
+                dayClearRoutine = StartCoroutine(CallGameClearAfterDelay(5f));
+            }
         }
 
         // isDefence 값에 따라 낮/밤 결정
@@ -142,6 +156,12 @@ public class GameManager : MonoBehaviour
         titleFadeInDuration = 0.2f;
         titleFadeOutDuration = 0.2f;
     }
+    public void TitleTextSlow()
+    {
+        titleDisplayDuration = 4f;
+        titleFadeInDuration = 0.5f;
+        titleFadeOutDuration = 0.5f;
+    }
     public void CallHomeText()
     {
         TitleTextFast();
@@ -161,7 +181,14 @@ public class GameManager : MonoBehaviour
         uimanager.isGaming = true;
         SpawnSpawnerByWave(); //스포너 생성
         isDefence = true;
-        titleText.text = Wave.ToString() + "번째 밤";
+        if (Wave == 10)
+        {
+            titleText.text = "마지막 날 밤";
+        }
+        else
+        {
+            titleText.text = Wave.ToString() + "번째 밤";
+        }
         titleText.color = new Color(1, 1, 0); // 노란색
         ShowTitleText();
         dayText.text = "Day " + Wave.ToString();
@@ -260,11 +287,7 @@ public class GameManager : MonoBehaviour
             directionalLight.intensity = 3f;
             targetColor = directionalLight.color;
             targetIntensity = directionalLight.intensity;
-
-            //// 낮이 되는 로직: 3초 뒤에 UImanager.GameClear() 호출
-            //if (dayClearRoutine != null) StopCoroutine(dayClearRoutine);
-            //if (uimanager != null)
-            //    dayClearRoutine = StartCoroutine(CallGameClearAfterDelay(3f));
+            
         }
         else
         {
