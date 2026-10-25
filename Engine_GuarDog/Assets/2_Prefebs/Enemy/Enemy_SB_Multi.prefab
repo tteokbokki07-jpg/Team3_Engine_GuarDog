@@ -373,7 +373,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4fdda7d275d2ae4d9c9335c536bc7c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyShooter
-  bulletPrefab: {fileID: 2205163610957453508, guid: 40e166993cb146847b7ee288e83431f7, type: 3}
+  bulletPrefab: {fileID: 2205163610957453508, guid: 083e770e22206dd45b8cadaf12ab0ddd, type: 3}
   firePoint: {fileID: 7162113549548059331}
   moveSpeed: 2
   detectRange: 25

@@ -104,9 +104,9 @@ public class HealthItem : MonoBehaviour
     public void OnAgainUpgrade()
     {
         var prefabBullet = playerShotRef.bulletPrefab.GetComponent<Bullet>();
-        prefabBullet.moredamage += 3; //총알 추가 데미지 증가
+        prefabBullet.moredamage += 2; //총알 추가 데미지 증가
         PlayerHealth.maxHP += 25; // 최대 체력 증가
-        playerShotRef.fireCooldown -= 0.05f; // 발사 속도 증가
+        playerShotRef.fireCooldown -= 0.025f; // 발사 속도 증가
     }
 
     IEnumerator AdrenalineCoroutine()

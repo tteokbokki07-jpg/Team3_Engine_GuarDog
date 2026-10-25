@@ -259,7 +259,7 @@ MonoBehaviour:
   moveSpeed: 5
   detectRange: 22.5
   attackRange: 2
-  damage: 5
+  damage: 10
   attackCooldown: 1.5
   goHome: 0
 --- !u!114 &3898818528070245405
@@ -282,6 +282,7 @@ MonoBehaviour:
   gameManager: {fileID: 0}
   healthItem: {fileID: 0}
   hitEffect: {fileID: 3528138791037262641, guid: c85f0acbb5b9505408d75d18d3d81ae8, type: 3}
+  invincibleTime: 0
 --- !u!54 &3178119208013632098
 Rigidbody:
   m_ObjectHideFlags: 0

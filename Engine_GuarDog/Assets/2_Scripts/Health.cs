@@ -12,6 +12,9 @@ public class Health : MonoBehaviour
     public GameManager gameManager;
     public HealthItem healthItem; // HealthItem 참조
     public GameObject hitEffect;
+    public float invincibleTime = 0f;   // 플레이어는 0.5
+    float lastHitTime = -999f;
+
 
     void Start()
     {
@@ -47,6 +50,8 @@ public class Health : MonoBehaviour
     public void TakeDamage(int damage)
     {
         if (currentHP <= 0) return;
+        if (Time.time < lastHitTime + invincibleTime) return;
+        lastHitTime = Time.time;
 
         currentHP -= damage;
         Debug.Log(name + " HP: " + currentHP + " / " + maxHP + " 받은피해: " + damage);
@@ -63,7 +68,24 @@ public class Health : MonoBehaviour
         }
 
         if (currentHP <= 0) Die();
+        else Blink();
+
     }
+    void Blink()
+    {
+        SetVisible(false);
+        Invoke(nameof(ShowAgain), 0.1f);
+    }
+    void ShowAgain()
+    {
+        SetVisible(true);
+    }
+    void SetVisible(bool on)
+    {
+        foreach (Renderer r in GetComponentsInChildren<Renderer>())
+            r.enabled = on;
+    }
+
 
     // 회복을 위한 공개 메서드 추가
     public void Heal(int amount)

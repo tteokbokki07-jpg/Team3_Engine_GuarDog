@@ -4,6 +4,17 @@ using TMPro;
 
 public class GameManager : MonoBehaviour
 {
+    [Header("스카이박스 설정")]
+    public Color daySkyTint = new Color(0.45f, 0.76f, 0.83f);
+    public Color nightSkyTint = new Color(0.08f, 0.12f, 0.28f);
+    public Color dayGroundColor = new Color(0.35f, 0.32f, 0.28f);
+    public Color nightGroundColor = new Color(0.04f, 0.05f, 0.09f);
+    public float dayExposure = 1.2f;
+    public float nightExposure = 0.35f;
+    private Material runtimeSkybox;
+    private Color targetSkyTint;
+    private Color targetGroundColor;
+    private float targetExposure;
     [Header("낮밤 설정")]
     public Light directionalLight;
     public float transitionSpeed = 1f;
@@ -62,6 +73,15 @@ public class GameManager : MonoBehaviour
             targetIntensity = directionalLight.intensity;
         }
 
+        // 스카이박스 초기화
+        if (RenderSettings.skybox != null)
+        {
+            // 기존 스카이박스를 복제하여 실행 중에만 변경
+            runtimeSkybox = new Material(RenderSettings.skybox);
+
+            RenderSettings.skybox = runtimeSkybox;
+        }
+
         // isDefence 값에 따라 낮/밤 결정 (isDefence == true -> 밤, false -> 낮)
         isDay = !isDefence;
         lastIsDay = !isDay;
@@ -107,7 +127,13 @@ public class GameManager : MonoBehaviour
                 dayClearRoutine = StartCoroutine(CallGameClearAfterDelay(5f));
             }
         }
-
+        if (MissionKillCount >= MissionCount)
+        {
+            Debug.Log("MissionComplete");
+            MissionKillCount -= MissionCount;
+            BonusUpg++;
+            MissionCount = (int)(MissionCount * 1.4f);
+        }
         // isDefence 값에 따라 낮/밤 결정
         // isDefence == true  -> 밤
         // isDefence == false -> 낮
@@ -135,14 +161,49 @@ public class GameManager : MonoBehaviour
                 Time.deltaTime * transitionSpeed
             );
         }
-
-        if (MissionKillCount >= MissionCount)
+        // Skybox가 있으면 서서히 보간
+        if (runtimeSkybox != null)
         {
-            Debug.Log("MissionComplete");
-            MissionKillCount -= MissionCount;
-            BonusUpg ++;
-            MissionCount = (int)(MissionCount * 1.4f);
+            // 하늘 색상 변경
+            if (runtimeSkybox.HasProperty("_SkyTint"))
+            {
+                runtimeSkybox.SetColor(
+                    "_SkyTint",
+                    Color.Lerp(
+                        runtimeSkybox.GetColor("_SkyTint"),
+                        targetSkyTint,
+                        Time.deltaTime * transitionSpeed
+                    )
+                );
+            }
+
+            // 지평선 아래쪽 색상 변경
+            if (runtimeSkybox.HasProperty("_GroundColor"))
+            {
+                runtimeSkybox.SetColor(
+                    "_GroundColor",
+                    Color.Lerp(
+                        runtimeSkybox.GetColor("_GroundColor"),
+                        targetGroundColor,
+                        Time.deltaTime * transitionSpeed
+                    )
+                );
+            }
+
+            // 하늘 노출값 변경
+            if (runtimeSkybox.HasProperty("_Exposure"))
+            {
+                runtimeSkybox.SetFloat(
+                    "_Exposure",
+                    Mathf.MoveTowards(
+                        runtimeSkybox.GetFloat("_Exposure"),
+                        targetExposure,
+                        Time.deltaTime * transitionSpeed
+                    )
+                );
+            }
         }
+
     }
     public void TitleTextNormal()
     {
@@ -280,21 +341,13 @@ public class GameManager : MonoBehaviour
     // 시작시 강제 즉시 적용(원하면 제거)
     void ApplyDayNightImmediate(bool toDay)
     {
-        if (directionalLight == null) return;
         if (toDay)
         {
-            directionalLight.color = Color.white;
-            directionalLight.intensity = 3f;
-            targetColor = directionalLight.color;
-            targetIntensity = directionalLight.intensity;
-            
+            SetDayTargets();
         }
         else
         {
-            targetColor = new Color32(8, 136, 254, 255);
-            targetIntensity = 1f;
-            directionalLight.color = targetColor;
-            directionalLight.intensity = targetIntensity;
+            SetNightTargets();
 
             // 밤으로 전환 시 예약된 낮 클리어 취소
             if (dayClearRoutine != null)
@@ -303,18 +356,55 @@ public class GameManager : MonoBehaviour
                 dayClearRoutine = null;
             }
         }
+
+        // Directional Light 즉시 적용
+        if (directionalLight != null)
+        {
+            directionalLight.color = targetColor;
+            directionalLight.intensity = targetIntensity;
+        }
+
+        // Skybox 즉시 적용
+        if (runtimeSkybox != null)
+        {
+            if (runtimeSkybox.HasProperty("_SkyTint"))
+            {
+                runtimeSkybox.SetColor("_SkyTint", targetSkyTint);
+            }
+
+            if (runtimeSkybox.HasProperty("_GroundColor"))
+            {
+                runtimeSkybox.SetColor("_GroundColor", targetGroundColor);
+            }
+
+            if (runtimeSkybox.HasProperty("_Exposure"))
+            {
+                runtimeSkybox.SetFloat("_Exposure", targetExposure);
+            }
+        }
     }
 
     void SetDayTargets()
     {
+        // Directional Light
         targetColor = Color.white;
         targetIntensity = 3f;
-    }
 
+        // Skybox
+        targetSkyTint = daySkyTint;
+        targetGroundColor = dayGroundColor;
+        targetExposure = dayExposure;
+    }
     void SetNightTargets()
     {
+        // Directional Light
         targetColor = new Color32(8, 136, 254, 255);
         targetIntensity = 1f;
+
+        // Skybox
+        targetSkyTint = nightSkyTint;
+        targetGroundColor = nightGroundColor;
+        targetExposure = nightExposure;
     }
 
     System.Collections.IEnumerator CallGameClearAfterDelay(float delay)

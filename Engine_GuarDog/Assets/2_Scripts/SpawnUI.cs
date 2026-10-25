@@ -29,8 +29,12 @@ public class SpawnUI : MonoBehaviour
         {
             currentSpawn = enemySpawner.currentSpawn;
             totalSpawn = enemySpawner.totalSpawn;
+            if (gameManager.EnemyCount == 0)
+            {
+                enemySpawner.timer = 999f;
+            }
         }
-
+        
         // EnemySpawner가 없어도 UI 전체는 계속 갱신합니다.
         spawnUItext.text =
             $"처치한 모든 적 : {gameManager.KillCount}" +

@@ -135,7 +135,7 @@ public class PlayerShot : MonoBehaviour
     // 실제 총알 생성 로직 (쿨다운 검사 없이 호출)
     void FireBullets()
     {
-        float[] angles = isMultiShot ? new float[] { -15f, 0f, 15f } : new float[] { 0f };
+        float[] angles = isMultiShot ? new float[] { -10f, 0f, 10f } : new float[] { 0f };
         foreach (float angle in angles)
         {
             Quaternion rot = firePoint.rotation * Quaternion.Euler(0f, angle, 0f); //firePoint 회전 기준으로 y축 회전

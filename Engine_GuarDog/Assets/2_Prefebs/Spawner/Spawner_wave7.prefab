@@ -90,13 +90,13 @@ MonoBehaviour:
   - {fileID: 5279847061543763779, guid: e34ec8db4d052fd449c3d0de6f9bc68b, type: 3}
   - {fileID: 5279847061543763779, guid: e34ec8db4d052fd449c3d0de6f9bc68b, type: 3}
   spawnPositions:
-  - {x: 50, y: 1.5, z: 0}
+  - {x: 55, y: 1.5, z: 0}
   - {x: 40, y: 1.5, z: 40}
-  - {x: 0, y: 1.5, z: 50}
+  - {x: 0, y: 1.5, z: 55}
   - {x: -40, y: 1.5, z: 40}
-  - {x: -50, y: 1.5, z: 0}
+  - {x: -55, y: 1.5, z: 0}
   - {x: 40, y: 1.5, z: -40}
-  - {x: 0, y: 1.5, z: -50}
+  - {x: 0, y: 1.5, z: -55}
   - {x: -40, y: 1.5, z: -40}
   timer: 13
   spawnInterval: 16

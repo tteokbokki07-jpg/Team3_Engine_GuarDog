@@ -86,16 +86,16 @@ MonoBehaviour:
   enemyPrefabs:
   - {fileID: 5279847061543763779, guid: 4f910c4943c931b49b953f9620b8d52d, type: 3}
   spawnPositions:
-  - {x: 50, y: 1.5, z: 0}
+  - {x: 55, y: 1.5, z: 0}
   - {x: 40, y: 1.5, z: 40}
-  - {x: 0, y: 1.5, z: 50}
+  - {x: 0, y: 1.5, z: 55}
   - {x: -40, y: 1.5, z: 40}
-  - {x: -50, y: 1.5, z: 0}
+  - {x: -55, y: 1.5, z: 0}
   - {x: 40, y: 1.5, z: -40}
-  - {x: 0, y: 1.5, z: -50}
+  - {x: 0, y: 1.5, z: -55}
   - {x: -40, y: 1.5, z: -40}
-  timer: 5
-  spawnInterval: 8
+  timer: 6
+  spawnInterval: 9
   oneSpawnCount: 2
   totalSpawn: 10
   currentSpawn: 0
