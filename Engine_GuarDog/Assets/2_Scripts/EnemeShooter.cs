@@ -154,6 +154,9 @@ public class EnemyShooter : MonoBehaviour
     // 여러 탄환을 한 번에 발사 (멀티샷 / 더블샷 지원)
     void FireBurst(Vector3 target, string targetTag, bool isSecondary)
     {
+        SoundManager.Instance.PlaySFX(SoundManager.Instance.swingSound, 0.35f, 1f); //사운드 재생(음량, 높이)
+        SoundManager.Instance.PlaySFX(SoundManager.Instance.enemyshootSound, 0.35f, 1f); //사운드 재생(음량, 높이)
+
         Vector3 baseDir = (target - firePoint.position).normalized;
         // 멀티샷이면 -15,0,15도 각도로 발사, 아니면 정면 0도만
         float[] angles = EnemyisMultiShot ? new float[] { -15f, 0f, 15f } : new float[] { 0f };

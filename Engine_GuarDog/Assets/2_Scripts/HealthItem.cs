@@ -106,6 +106,7 @@ public class HealthItem : MonoBehaviour
         var prefabBullet = playerShotRef.bulletPrefab.GetComponent<Bullet>();
         prefabBullet.moredamage += 2; //총알 추가 데미지 증가
         PlayerHealth.maxHP += 25; // 최대 체력 증가
+        PlayerHealth.Heal(25); // 증가한 만큼 회복
         playerShotRef.fireCooldown -= 0.025f; // 발사 속도 증가
     }
 

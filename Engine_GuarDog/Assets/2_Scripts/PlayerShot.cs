@@ -31,6 +31,7 @@ public class PlayerShot : MonoBehaviour
     public void OnBigShot()
     {
         isBigShot = true;
+        bulletSpeed *= 1.5f; //총알 속도 증가
     }
 
     public void StatATKUpg1()
@@ -160,6 +161,9 @@ public class PlayerShot : MonoBehaviour
                 bulletComp.isBigShot = isBigShot;
             }
         }
+
+        SoundManager.Instance.PlaySFX(SoundManager.Instance.swingSound, 0.25f, 1f); //사운드 재생(음량, 높이)
+        SoundManager.Instance.PlaySFX(SoundManager.Instance.popSound, 0.05f, 1f); //사운드 재생(음량, 높이)
     }
 
     IEnumerator DoubleShotCoroutine(float delay) // delay 후에 한 번 더 발사

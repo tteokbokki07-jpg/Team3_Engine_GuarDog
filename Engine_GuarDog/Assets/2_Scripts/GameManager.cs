@@ -63,6 +63,8 @@ public class GameManager : MonoBehaviour
         ShowTitleText();
         dayText.text = "Day " + Wave.ToString();
 
+        SoundManager.Instance.PlaySFX(SoundManager.Instance.titletextSound, 0.5f, 1f); //사운드 재생(음량, 높이)
+
         // 초기 적 수 계산
         EnemyCount = GameObject.FindGameObjectsWithTag("Enemy").Length;
 
@@ -114,6 +116,10 @@ public class GameManager : MonoBehaviour
                 Wave++;
                 Invoke(nameof(CallUpgrade), 4f);
                 Invoke(nameof(CallNextWave), 6f);
+                
+                var health = playerController.GetComponent<Health>();
+                health.Heal(20);
+                SoundManager.Instance.PlaySFX(SoundManager.Instance.completeSound, 0.5f, 1f); //사운드 재생(음량, 높이)
             }
             else
             {
@@ -254,7 +260,7 @@ public class GameManager : MonoBehaviour
         ShowTitleText();
         dayText.text = "Day " + Wave.ToString();
 
-        
+        SoundManager.Instance.PlaySFX(SoundManager.Instance.titletextSound, 0.5f, 1f); //사운드 재생(음량, 높이)
     }
     public void CallGameOverText()
     {

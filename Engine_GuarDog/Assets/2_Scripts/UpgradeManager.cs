@@ -199,6 +199,7 @@ public class UpgradeManager : MonoBehaviour
                 // 클릭 시: 선택 이벤트 실행, UI에 '선택된 카드 인덱스(1-based)' 전달, 제외 처리, 창 닫기
                 btn.onClick.AddListener(() =>
                 {
+                    SoundManager.Instance.PlaySFX(SoundManager.Instance.cardSelectSound, 0.5f, 1f); //사운드 재생(음량, 높이)
                     // 중복 클릭 방지
                     foreach (GameObject card in spawnedCards)
                     {
@@ -302,6 +303,8 @@ public class UpgradeManager : MonoBehaviour
 
     IEnumerator ScaleUp(Transform cardTransform) // 카드가 커지면서 등장하는 애니메이션
     {
+        SoundManager.Instance.PlaySFX(SoundManager.Instance.cardSound, 1.5f, 1f); //사운드 재생(음량, 높이)
+
         float elapsed = 0f;
 
         Vector3 startScale = Vector3.zero;
@@ -333,6 +336,8 @@ public class UpgradeManager : MonoBehaviour
     
     IEnumerator ScaleDown(Transform cardTransform) // 선택하지 않은 카드가 작아지면서 사라지는 애니메이션
     {
+        SoundManager.Instance.PlaySFX(SoundManager.Instance.cardSound, 1.5f, 1f); //사운드 재생(음량, 높이)
+
         float elapsed = 0f;
         float duration = 0.2f;
 

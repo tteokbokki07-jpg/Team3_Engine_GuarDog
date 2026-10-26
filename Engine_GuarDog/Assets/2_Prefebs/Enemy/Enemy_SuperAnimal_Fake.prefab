@@ -136,11 +136,11 @@ Transform:
   m_GameObject: {fileID: 1707739541200626943}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.5, y: 0.99849033, z: 0.72}
+  m_LocalPosition: {x: 0, y: 4.4984903, z: 0.9688301}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 3696595510843601666}
+  m_Father: {fileID: 1427171143281544482}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4712271738373353828
 GameObject:
@@ -217,64 +217,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!1 &4952759335339373462
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 3696595510843601666}
-  - component: {fileID: 3025789376741012705}
-  m_Layer: 0
-  m_Name: GameObject
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &3696595510843601666
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4952759335339373462}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.5, y: 3.5, z: 0.24883}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 2039186365309138429}
-  - {fileID: 5138224421078696075}
-  m_Father: {fileID: 1427171143281544482}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3025789376741012705
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4952759335339373462}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b4fdda7d275d2ae4d9c9335c536bc7c5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnemyShooter
-  bulletPrefab: {fileID: 2205163610957453508, guid: 3a18e973cd7f15a498d38883f450ee2a, type: 3}
-  firePoint: {fileID: 2039186365309138429}
-  moveSpeed: 0
-  detectRange: 0
-  keepDistance: 0
-  fireRange: 17
-  fireInterval: 2
-  bulletSpeed: 10
-  goHome: 0
-  isBigType: 1
-  EnemyisMultiShot: 1
-  EnemyisDoubleShot: 1
 --- !u!1 &5279847061543763779
 GameObject:
   m_ObjectHideFlags: 0
@@ -286,6 +228,7 @@ GameObject:
   - component: {fileID: 1427171143281544482}
   - component: {fileID: 259436299571251815}
   - component: {fileID: 8989993710113736706}
+  - component: {fileID: 1340500544901604738}
   - component: {fileID: 3898818528070245405}
   - component: {fileID: 3178119208013632098}
   m_Layer: 0
@@ -310,7 +253,8 @@ Transform:
   m_Children:
   - {fileID: 7897966377590987765}
   - {fileID: 9141770380719488915}
-  - {fileID: 3696595510843601666}
+  - {fileID: 5138224421078696075}
+  - {fileID: 2039186365309138429}
   - {fileID: 8084224748976382784}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -347,12 +291,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f76009092a528d546bf0f45b027ff55b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemeChaser
-  moveSpeed: 2.5
-  detectRange: 20
-  attackRange: 3.5
-  damage: 35
-  attackCooldown: 3
+  moveSpeed: 3.5
+  detectRange: 50
+  attackRange: 3
+  damage: 50
+  attackCooldown: 0.5
   goHome: 0
+--- !u!114 &1340500544901604738
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5279847061543763779}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4fdda7d275d2ae4d9c9335c536bc7c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyShooter
+  bulletPrefab: {fileID: 2205163610957453508, guid: 30d9479c5b414be418168a785e482f0a, type: 3}
+  firePoint: {fileID: 2039186365309138429}
+  moveSpeed: 0
+  detectRange: 99
+  keepDistance: 0
+  fireRange: 25
+  fireInterval: 0.4
+  bulletSpeed: 25
+  goHome: 0
+  isBigType: 1
+  EnemyisMultiShot: 1
+  EnemyisDoubleShot: 1
 --- !u!114 &3898818528070245405
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -365,8 +333,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac4089395f56b674280d3cd8fca27336, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Health
-  maxHP: 200
-  currentHP: 200
+  maxHP: 3000
+  currentHP: 3000
   hpSlider: {fileID: 5031110459465914936}
   HPText: {fileID: 0}
   isMaxHP: 1
@@ -611,7 +579,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 3696595510843601666}
+    m_TransformParent: {fileID: 1427171143281544482}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: b1547c05c06b7c14392d2f090f33ea3c, type: 3}
       propertyPath: m_LocalScale.x
@@ -627,15 +595,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: b1547c05c06b7c14392d2f090f33ea3c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: b1547c05c06b7c14392d2f090f33ea3c, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.40349007
+      value: 3.90349
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: b1547c05c06b7c14392d2f090f33ea3c, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.31116998
+      value: 0.5600004
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: b1547c05c06b7c14392d2f090f33ea3c, type: 3}
       propertyPath: m_LocalRotation.w

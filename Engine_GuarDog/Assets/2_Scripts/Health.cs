@@ -60,11 +60,14 @@ public class Health : MonoBehaviour
         Vector3 hitPos = transform.position + Vector3.up;
         if (hitEffect != null)
             Instantiate(hitEffect, hitPos, Quaternion.identity);
-
+        
+        if (CompareTag("Enemy")) SoundManager.Instance.PlaySFX(SoundManager.Instance.hitSound, 0.25f, 1f); //사운드 재생(음량, 높이)
+        if (CompareTag("Player")) SoundManager.Instance.PlaySFX(SoundManager.Instance.playerhitSound, 0.55f, 1.5f); //사운드 재생(음량, 높이)
         if (CompareTag("Home"))
         {
             Debug.Log("집 공격받는중");
             gameManager.CallHomeText();
+            SoundManager.Instance.PlaySFX(SoundManager.Instance.homehitSound, 0.35f, 1f); //사운드 재생(음량, 높이)
         }
 
         if (currentHP <= 0) Die();
@@ -147,5 +150,6 @@ public class Health : MonoBehaviour
         UpdateBar();
         UpdateHPText();
         Debug.Log(name + " Revived");
+        SoundManager.Instance.PlaySFX(SoundManager.Instance.revieveSound, 0.75f, 1f); //사운드 재생(음량, 높이)
     }
 }
