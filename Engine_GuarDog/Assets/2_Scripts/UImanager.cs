@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -89,7 +90,7 @@ public class UImanager : MonoBehaviour
     }
     public void Title()
     {
-        SceneManager.LoadScene("Title");
+        SceneFade.Instance.ChangeScene("Title");
         Time.timeScale = 1;
         isPaused = false;
 
@@ -99,7 +100,7 @@ public class UImanager : MonoBehaviour
     }
     public void Map()
     {
-        SceneManager.LoadScene("Map");
+        SceneFade.Instance.ChangeScene("Map");
         Time.timeScale = 1;
         isPaused = false;
 
@@ -107,6 +108,16 @@ public class UImanager : MonoBehaviour
         //Cursor.visible = false;
 
         //if (playerController != null) playerController.SetLookEnabled(true);
+    }
+    public void GameOver()
+    {
+        SceneFade.Instance.ChangeScene("GameOver");
+        Time.timeScale = 1;
+        isPaused = false;
+
+        // 커서 보이기 및 잠금 해제
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
     }
     public void GameClear()
     {
@@ -122,16 +133,17 @@ public class UImanager : MonoBehaviour
         // 카메라 입력 비활성화
         if (playerController != null) playerController.SetLookEnabled(false);
     }
-    public void GameOver()
-    {
-        SceneManager.LoadScene("GameOver");
-        Time.timeScale = 1;
-        isPaused = false;
 
-        // 커서 보이기 및 잠금 해제
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
+    public void CutSceneSFX1()
+    {
+        SoundManager.Instance.PlaySFX(SoundManager.Instance.homehitSound, 0.35f, 1f); //사운드 재생(음량, 높이)
+    }    
+    public void CutSceneSFX2()
+    {
+        SoundManager.Instance.PlaySFX(SoundManager.Instance.swingSound, 0.5f, 1f); //사운드 재생(음량, 높이)
+        SoundManager.Instance.PlaySFX(SoundManager.Instance.popSound, 0.25f, 1f); //사운드 재생(음량, 높이)
+        SoundManager.Instance.PlaySFX(SoundManager.Instance.hitSound, 0.25f, 1f); //사운드 재생(음량, 높이)
     }
 
- 
+
 }
